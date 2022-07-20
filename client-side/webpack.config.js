@@ -33,8 +33,7 @@ module.exports = {
             name: `${filename}`,
             filename: `${filename}.js`,
             exposes: {
-                './BlockModule': './src/app/block/index.ts',
-                './BlockEditorModule': './src/app/block-editor/index.ts',
+                './ActivityEventsModule': './src/app/activity-events/index.ts',
             },
             shared: share({
                 "@angular/core": { eager: true, singleton: true, strictVersion: true, requiredVersion: 'auto' }, 
