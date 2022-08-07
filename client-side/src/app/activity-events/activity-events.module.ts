@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { TranslateLoader, TranslateModule, TranslateService, TranslateStore } from '@ngx-translate/core';
 import { PepAddonService } from '@pepperi-addons/ngx-lib';
+import { PepRemoteLoaderModule } from '@pepperi-addons/ngx-lib/remote-loader'
 
 import { ActivityEventsComponent } from './index';
 
@@ -20,6 +21,7 @@ export const routes: Routes = [
     declarations: [ActivityEventsComponent],
     imports: [
         CommonModule,
+        PepRemoteLoaderModule,
         TranslateModule.forChild({
             loader: {
                 provide: TranslateLoader,
