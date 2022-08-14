@@ -17,7 +17,7 @@ export class UtilitiesService {
 
     async createRelations(relations) {
         await Promise.all(relations.map(async (singleRelation) => {
-            await this.papiClient.addons.data.relations.upsert(singleRelation);
+            return await this.papiClient.addons.data.relations.upsert(singleRelation);
         }));
     }
       
