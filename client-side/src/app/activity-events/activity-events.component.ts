@@ -31,7 +31,7 @@ export class ActivityEventsComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         const eventsBlockDev = this.activateRoute.snapshot.queryParams.events_dev || false;
         if(eventsBlockDev) {
-            this.eventsBlockPath = 'http://localhost:4600/file_cbbc42ca_0f20_4ac8_b4c6_8f87ba7c16ad.js';
+            this.eventsBlockPath = 'http://localhost:4600/file_cbbc42ca-0f20-4ac8-b4c6-8f87ba7c16ad.js';
         }
         this.hostObject = {
             ...this.hostObject,
