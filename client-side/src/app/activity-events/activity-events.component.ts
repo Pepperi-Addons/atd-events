@@ -25,8 +25,6 @@ export class ActivityEventsComponent implements OnInit, AfterViewInit {
 
 
     constructor(
-        private translate: TranslateService,
-        private addonBlockLoaderService: PepAddonBlockLoaderService,
         private activateRoute: ActivatedRoute,
         private router: Router,
         ) {
@@ -40,35 +38,68 @@ export class ActivityEventsComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit(): void {
+        const fields = [{
+            ApiName: 'TSAInventory',
+            Title: 'Invetory'
+        },
+        {
+            ApiName: 'UnitsQuantity',
+            Title: 'Quantity field'
+        },
+        {
+            ApiName: 'UnitPriceAfterDiscount',
+            Title: 'Price after discount'
+        }];
         this.hostObject = {
             ...this.hostObject,
             AddonUUID: config.AddonUUID,
             PossibleEvents: [{
+                Title: 'Setting field value',
                 EventKey: 'SetFieldValue',
-                EventFilter: '{\"DataObject\":{\"typeDefinition\":{\"internalID\":267286}}}',
-                SupportField: true
+                EventFilter: {
+                    DataObject: {
+                        typeDefinition:{
+                            internalID:267286
+                        }
+                    }
+                },
+                Fields: fields
             },
             {
+                Title: 'Incrementing field\'s value',
                 EventKey: 'IncrementFieldValue',
-                EventFilter: '{\"DataObject\":{\"typeDefinition\":{\"internalID\":267286}}}',
-                SupportField: true
+                EventFilter: {
+                    DataObject: {
+                        typeDefinition:{
+                            internalID:267286
+                        }
+                    }
+                },
+                Fields: fields
             },
             {
-                EventKey: 'TransactionScopeLoaded',
-                EventFilter: '{\"DataObject\":{\"typeDefinition\":{\"internalID\":267286}}}',
-                SupportField: false
+                Title: 'before loading transaction scope',
+                EventKey: 'PreLoadTransactionScope',
+                EventFilter: {
+                    DataObject: {
+                        typeDefinition:{
+                            internalID:267286
+                        }
+                    }
+                },
             },
             {
-                EventKey: 'TransactionScopeLoad',
-                EventFilter: '{\"DataObject\":{\"typeDefinition\":{\"internalID\":267286}}}',
-                SupportField: false
+                Title: 'after transaction scope loaded',
+                EventKey: 'OnLoadTransactionScope',
+                EventFilter: {
+                    DataObject: {
+                        typeDefinition:{
+                            internalID:267286
+                        }
+                    }
+                },
             }],
-            PossibleFields: [
-                'TSAInventory',
-                'UnitsQuantity',
-                'UnitPriceAfterDiscount'
-            ],
-            Group: '267286',
+            Name: '267286',
         }
     }
 
