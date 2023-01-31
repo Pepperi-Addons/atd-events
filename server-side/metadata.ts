@@ -3,6 +3,13 @@ import config from "../addon.config.json";
 
 const filename = `file_${config.AddonUUID}`;
 
+export type ObjectType = 'transactions' | 'transaction_lines'
+
+export const WF_EVENT_PREFIX = 'WFAction';
+export const TSA_EVENT_PREFIX = 'TSAEmitEvent';
+
+
+
 export const AtdRelations: Relation[] = [{   
     //meta data for realtion of type NgComponent
     RelationName: "TransactionTypeListTabs",
