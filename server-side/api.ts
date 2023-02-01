@@ -9,7 +9,7 @@ export async function get_transactions_events(client: Client, request: Request) 
         case 'GET': {
             const typeUuid = request.query.type_uuid;
             const service: EventsService = new EventsService(client, typeUuid);
-            return await service.getWFEvents();
+            return await service.getTransactionEvents();
             break;
         }
         default: {

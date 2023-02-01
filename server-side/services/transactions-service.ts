@@ -6,7 +6,7 @@ export class TransactionsService {
 
     utilities = new UtilitiesService(this.client);
     
-    constructor(private client: Client) { }
+    constructor(private client: Client, private atdUUID) { }
 
     private async getInternalID(uuid: string): Promise<number> {
         let atdID = -1;
@@ -23,21 +23,21 @@ export class TransactionsService {
         return atdID;
     }
 
-    private async getFields(type: ObjectType, atdID: number) {
+    async getFields(type: ObjectType) {
+        const atdID = await this.getInternalID(this.atdUUID);
         return await this.utilities.papiClient.metaData.type(type).types.subtype(atdID.toString()).fields.get();
     }
 
-    private async getBooleanFields(type: ObjectType, atdID: number) {
-        const fields = await this.getFields(type, atdID);
+    private async getBooleanFields(type: ObjectType) {
+        const fields = await this.getFields(type);
 
         return fields.filter(field => {
             return field.Type === 'Boolean'
         })
     }
 
-    async getWFEventFields(atdUuid: string) {
-        const atdID = await this.getInternalID(atdUuid);
-        const booleanFields = await this.getBooleanFields('transactions', atdID);
+    async getWFEventFields() {
+        const booleanFields = await this.getBooleanFields('transactions');
         const res = booleanFields.filter(field => field.FieldID.startsWith(TSA_EVENT_PREFIX));
         return res;
     }
