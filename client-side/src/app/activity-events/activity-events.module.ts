@@ -9,6 +9,7 @@ import { PepRemoteLoaderModule } from '@pepperi-addons/ngx-lib/remote-loader'
 import { ActivityEventsComponent } from './index';
 
 import { config } from '../addon.config';
+import { EventsService } from '../services/events.service';
 
 export const routes: Routes = [
     {
@@ -35,6 +36,7 @@ export const routes: Routes = [
     exports: [ActivityEventsComponent],
     providers: [
         TranslateStore,
+        EventsService
         // Add here all used services.
     ]
 })
