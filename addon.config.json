@@ -17,6 +17,8 @@
     "Dependencies": {
       "user_events": "0.0.120"
     },
-    "CPISide": []
+    "CPISide": [
+      "addon-cpi"
+    ]
   }
 }
