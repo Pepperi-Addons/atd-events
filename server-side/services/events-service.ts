@@ -48,7 +48,7 @@ export class EventsService {
         return {
             DataObject: {
                 typeDefinition: {
-                    uuid: this.atdUUID
+                    UUID: this.atdUUID
                 }
             }
         }
