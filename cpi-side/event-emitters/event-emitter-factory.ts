@@ -1,5 +1,6 @@
-import { Transaction } from "@pepperi-addons/cpi-node/build/cpi-side/app/entities";
-import { EventKey } from "@pepperi-addons/cpi-node/build/cpi-side/events";
+
+import '@pepperi-addons/cpi-node'
+import { DataObject } from '@pepperi-addons/cpi-node';
 import { InterceptorData } from "../metadata";
 import { IEventEmitter } from "./event-emitter";
 import { TransactionFieldChangeEventEmitter } from "./transaction-field-change-emitter";
@@ -7,8 +8,9 @@ import { TransactionLineFieldChangeEventEmitter } from "./transaction-line-field
 import { TransactionScopeLoadEventEmitter } from "./transaction-scope-load-emitter";
 
 export class EventEmitterFactory {
-    static create(eventKey: EventKey, params: InterceptorData): IEventEmitter {
+    static create(eventKey: string, params: InterceptorData): IEventEmitter {
         let res: IEventEmitter;
+        const dataObject = params.Data.DataObject as DataObject;
         switch (eventKey) {
             case 'PreLoadTransactionScope': {
                 res = new TransactionScopeLoadEventEmitter(params);
@@ -21,7 +23,7 @@ export class EventEmitterFactory {
             case 'SetFieldValue': 
             case 'IncrementFieldValue': 
             case 'DecrementFieldValue': {
-                if (params.Data.DataObject instanceof Transaction) {
+                if (dataObject.resource === 'transactions') {
                     res = new TransactionFieldChangeEventEmitter(params);
                 }
                 else {

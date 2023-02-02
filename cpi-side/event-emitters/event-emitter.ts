@@ -6,7 +6,7 @@ export abstract class IEventEmitter {
     constructor(protected params: InterceptorData) { }
 
     async handleEvent() {
-        const eventData = this.getEventData(this.params.Data.DataObject);
+        const eventData = await this.getEventData(this.params.Data.DataObject);
         const eventKey = this.getEventKey();
         return await this.emitEvent(eventKey, eventData);
     }

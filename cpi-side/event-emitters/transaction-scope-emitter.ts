@@ -12,7 +12,8 @@ export class TransactionScopeEventEmitter extends IEventEmitter {
     protected async getEventData(dataObj: DataObject) {
         await this.params.NextFunction(this.params.MainFunction);
         return {
-            TransactionUUID: dataObj.uuid
+            TransactionUUID: dataObj.uuid,
+            DataObject: this.params.Data.DataObject,
         }
     }
 
