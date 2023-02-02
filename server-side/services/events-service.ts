@@ -1,20 +1,30 @@
 import { Client } from "@pepperi-addons/debug-server/dist";
 import { AddonDataScheme, ApiFieldObject } from "@pepperi-addons/papi-sdk";
 import { UserEvent } from "../entities";
-import { TSA_EVENT_PREFIX, WF_EVENT_PREFIX } from "../metadata";
+import { ObjectType, TransactionScopeLoadedEvent, TransactionScopeLoadEvent, TSA_EVENT_PREFIX, WF_EVENT_PREFIX } from "../metadata";
 import { TransactionsService } from "./transactions-service";
 import { UtilitiesService } from "./utilities-service";
 
 
 export class EventsService {
     utilities = new UtilitiesService(this.client);
-    transactionsService = new TransactionsService(this.client);
+    transactionsService = new TransactionsService(this.client, this.atdUUID);
 
     constructor(private client: Client, private atdUUID: string) { }
 
+    async getTransactionEvents(): Promise<UserEvent[]> {
+        const res: UserEvent[] = []
+
+        const wfEvents = await this.getWFEvents();
+        const internalEvents = await this.getInternalTransactionEvents();
+        res.push(...wfEvents);
+        res.push(...internalEvents);
+        return res;
+    }
+
     async getWFEvents(): Promise<UserEvent[]> {
 
-        const fields = await this.transactionsService.getWFEventFields(this.atdUUID);
+        const fields = await this.transactionsService.getWFEventFields();
         const events = this.convertFieldsToWFEvents(fields);
 
         return events;
@@ -66,5 +76,42 @@ export class EventsService {
             Title: eventName
         }
     }
-    
+
+    private async getInternalTransactionEvents(): Promise<UserEvent[]> {
+        const res: UserEvent[] = [];
+        res.push(this.getTransactionLoadEvent())
+        res.push(this.getTransactionLoadedEvent())
+        res.push(await this.getFieldChangeEvent('transactions'))
+        res.push(await this.getFieldChangeEvent('transaction_lines'))
+        return res;
+    }
+
+    private getTransactionLoadEvent(): UserEvent {
+        return {
+            ...TransactionScopeLoadEvent,
+            EventFilter: this.getEventFilter()
+        }
+    }
+
+    private getTransactionLoadedEvent(): UserEvent {
+        return {
+            ...TransactionScopeLoadedEvent,
+            EventFilter: this.getEventFilter()
+        }
+    }
+
+    private async getFieldChangeEvent(type: ObjectType): Promise<UserEvent> {
+        const fields = await this.transactionsService.getFields(type);
+        const filter = this.getEventFilter();
+        return {
+            ...TransactionScopeLoadEvent,
+            EventFilter: filter,
+            Fields: fields.map(field => {
+                return {
+                    ApiName: field.FieldID,
+                    Title: field.Label
+                }
+            }).sort((a,b) => a.Title.localeCompare(b.Title))
+        }
+    }    
 }
