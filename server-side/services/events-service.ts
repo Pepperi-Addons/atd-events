@@ -1,7 +1,7 @@
 import { Client } from "@pepperi-addons/debug-server/dist";
 import { AddonDataScheme, ApiFieldObject } from "@pepperi-addons/papi-sdk";
 import { UserEvent } from "../entities";
-import { ObjectType, TransactionScopeLoadedEvent, TransactionScopeLoadEvent, TSA_EVENT_PREFIX, WF_EVENT_PREFIX } from "../metadata";
+import { ObjectType, OnTransactionFieldChangedEvent, OnTransactionLineFieldChangedEvent, TransactionScopeLoadedEvent, TransactionScopeLoadEvent, TSA_EVENT_PREFIX, WF_EVENT_PREFIX } from "../metadata";
 import { TransactionsService } from "./transactions-service";
 import { UtilitiesService } from "./utilities-service";
 
@@ -103,8 +103,9 @@ export class EventsService {
     private async getFieldChangeEvent(type: ObjectType): Promise<UserEvent> {
         const fields = await this.transactionsService.getFields(type);
         const filter = this.getEventFilter();
+        const event = type === 'transactions' ? OnTransactionFieldChangedEvent : OnTransactionLineFieldChangedEvent;
         return {
-            ...TransactionScopeLoadEvent,
+            ...event,
             EventFilter: filter,
             Fields: fields.map(field => {
                 return {
