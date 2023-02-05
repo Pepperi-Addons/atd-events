@@ -13,7 +13,7 @@ export class TransactionScopeEventEmitter extends IEventEmitter {
         await this.params.NextFunction(this.params.MainFunction);
         return {
             TransactionUUID: dataObj.uuid,
-            DataObject: this.params.Data.DataObject,
+            ObjectType: dataObj.typeDefinition?.name || ''
         }
     }
 

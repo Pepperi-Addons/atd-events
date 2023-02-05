@@ -20,7 +20,7 @@ export class TransactionLineFieldChangeEventEmitter extends IEventEmitter {
             FieldID: this.params.Data.FieldID,
             OldValue: oldValue,
             NewValue: newValue,
-            DataObject: this.params.Data.DataObject,
+            ObjectType: dataObj.typeDefinition?.name || ''
         }
     }
 

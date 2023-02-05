@@ -6,6 +6,7 @@ import { IEventEmitter } from "./event-emitter";
 import { TransactionFieldChangeEventEmitter } from "./transaction-field-change-emitter";
 import { TransactionLineFieldChangeEventEmitter } from "./transaction-line-field-change-emitter";
 import { TransactionScopeLoadEventEmitter } from "./transaction-scope-load-emitter";
+import { TransactionScopeLoadedEventEmitter } from './transaction-scope-loaded-emitter';
 
 export class EventEmitterFactory {
     static create(eventKey: string, params: InterceptorData): IEventEmitter {
@@ -17,7 +18,7 @@ export class EventEmitterFactory {
                 break;
             }
             case 'OnLoadTransactionScope': {
-                res = new TransactionScopeLoadEventEmitter(params);
+                res = new TransactionScopeLoadedEventEmitter(params);
                 break;
             }
             case 'SetFieldValue': 
