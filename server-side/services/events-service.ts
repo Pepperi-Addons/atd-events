@@ -10,11 +10,13 @@ export class EventsService {
     utilities = new UtilitiesService(this.client);
     transactionsService = new TransactionsService(this.client, this.atdUUID);
 
+    atdName: string = '';
+
     constructor(private client: Client, private atdUUID: string) { }
 
     async getTransactionEvents(): Promise<UserEvent[]> {
         const res: UserEvent[] = []
-
+        this.atdName = await this.transactionsService.getName(this.atdUUID);
         const wfEvents = await this.getWFEvents();
         const internalEvents = await this.getInternalTransactionEvents();
         res.push(...wfEvents);
@@ -46,11 +48,7 @@ export class EventsService {
 
     private getEventFilter() {
         return {
-            DataObject: {
-                typeDefinition: {
-                    UUID: this.atdUUID
-                }
-            }
+            ObjectType: this.atdName
         }
     }
 

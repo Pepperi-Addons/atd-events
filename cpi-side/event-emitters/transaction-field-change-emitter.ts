@@ -10,7 +10,6 @@ export class TransactionFieldChangeEventEmitter extends IEventEmitter {
     }
 
     protected async getEventData(dataObj: DataObject) {
-        
         const oldValue = dataObj.getFieldValue(this.params.Data.FieldID);
         await this.params.NextFunction(this.params.MainFunction);
         const newValue = await dataObj.getFieldValue(this.params.Data.FieldID);
@@ -20,7 +19,7 @@ export class TransactionFieldChangeEventEmitter extends IEventEmitter {
             FieldID: this.params.Data.FieldID,
             OldValue: oldValue,
             NewValue: newValue,
-            DataObject: this.params.Data.DataObject,
+            ObjectType: dataObj.typeDefinition?.name || ''
         }
     }
 
