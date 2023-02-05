@@ -2,6 +2,7 @@ import { Client } from "@pepperi-addons/debug-server/dist";
 import { AddonDataScheme, ApiFieldObject } from "@pepperi-addons/papi-sdk";
 import { UserEvent } from "../entities";
 import { ObjectType, OnTransactionFieldChangedEvent, OnTransactionLineFieldChangedEvent, TransactionScopeLoadedEvent, TransactionScopeLoadEvent, TSA_EVENT_PREFIX, WF_EVENT_PREFIX } from "../metadata";
+import { RelationsService } from "./relations-service";
 import { TransactionsService } from "./transactions-service";
 import { UtilitiesService } from "./utilities-service";
 
@@ -9,6 +10,7 @@ import { UtilitiesService } from "./utilities-service";
 export class EventsService {
     utilities = new UtilitiesService(this.client);
     transactionsService = new TransactionsService(this.client, this.atdUUID);
+    relationsService = new RelationsService(this.client);
 
     atdName: string = '';
 
@@ -19,8 +21,10 @@ export class EventsService {
         this.atdName = await this.transactionsService.getName(this.atdUUID);
         const wfEvents = await this.getWFEvents();
         const internalEvents = await this.getInternalTransactionEvents();
+        const relationsEvents = await this.relationsService.getTransactionsEvents(this.atdName);
         res.push(...wfEvents);
         res.push(...internalEvents);
+        res.push(...relationsEvents);
         return res;
     }
 
@@ -46,12 +50,6 @@ export class EventsService {
         return res;
     }
 
-    private getEventFilter() {
-        return {
-            ObjectType: this.atdName
-        }
-    }
-
     private getWFEventData(): AddonDataScheme['Fields'] {
         return {
             ObjectKey: {
@@ -65,7 +63,7 @@ export class EventsService {
 
     private getWFUserEvent(eventName): UserEvent {
         const eventKey = `${WF_EVENT_PREFIX}${eventName}`;
-        const filter = this.getEventFilter();
+        const filter = this.utilities.getEventFilter(this.atdName);
         const eventData = this.getWFEventData();
         return {
             EventKey: eventKey,
@@ -87,20 +85,20 @@ export class EventsService {
     private getTransactionLoadEvent(): UserEvent {
         return {
             ...TransactionScopeLoadEvent,
-            EventFilter: this.getEventFilter()
+            EventFilter: this.utilities.getEventFilter(this.atdName)
         }
     }
 
     private getTransactionLoadedEvent(): UserEvent {
         return {
             ...TransactionScopeLoadedEvent,
-            EventFilter: this.getEventFilter()
+            EventFilter: this.utilities.getEventFilter(this.atdName)
         }
     }
 
     private async getFieldChangeEvent(type: ObjectType): Promise<UserEvent> {
         const fields = await this.transactionsService.getFields(type);
-        const filter = this.getEventFilter();
+        const filter = this.utilities.getEventFilter(this.atdName);
         const event = type === 'transactions' ? OnTransactionFieldChangedEvent : OnTransactionLineFieldChangedEvent;
         return {
             ...event,

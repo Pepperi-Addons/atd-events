@@ -32,4 +32,10 @@ export class UtilitiesService {
             return types[0]
         });
     }
+
+    getEventFilter(atdName: string) {
+        return {
+            ObjectType: atdName
+        }
+    }
 }
