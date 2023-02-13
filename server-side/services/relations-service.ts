@@ -7,17 +7,17 @@ export class RelationsService {
     utilities: UtilitiesService = new UtilitiesService(this.client);
     constructor(private client: Client) { }
 
-    async getTransactionsEvents(atdName: string): Promise<UserEvent[]> {
+    async getTransactionsEvents(atdUUID: string): Promise<UserEvent[]> {
         // get relations of type UDCEvents with collection name
         const relations = await this.getRelations('transactions');
         // call the relation api function to get the events
         const events = (await this.getEventsFromRelations(relations, 'transactions')).Events;
-        return this.addEventFilter(events, atdName);
+        return this.addEventFilter(events, atdUUID);
     }
     
-    addEventFilter(events: UserEvent[], atdName: string): UserEvent[] {
+    addEventFilter(events: UserEvent[], atdUUID: string): UserEvent[] {
         return events.map((event) => {
-            const filter = this.utilities.getEventFilter(atdName);
+            const filter = this.utilities.getEventFilter(atdUUID);
             event.EventFilter = {
                 ...filter,
                 ...event.EventFilter

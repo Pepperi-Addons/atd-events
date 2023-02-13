@@ -33,9 +33,9 @@ export class UtilitiesService {
         });
     }
 
-    getEventFilter(atdName: string) {
+    getEventFilter(atdUUID: string) {
         return {
-            ObjectType: atdName
+            ObjectType: atdUUID
         }
     }
 }

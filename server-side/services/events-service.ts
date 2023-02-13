@@ -21,7 +21,7 @@ export class EventsService {
         this.atdName = await this.transactionsService.getName(this.atdUUID);
         const wfEvents = await this.getWFEvents();
         const internalEvents = await this.getInternalTransactionEvents();
-        const relationsEvents = await this.relationsService.getTransactionsEvents(this.atdName);
+        const relationsEvents = await this.relationsService.getTransactionsEvents(this.atdUUID);
         res.push(...wfEvents);
         res.push(...internalEvents);
         res.push(...relationsEvents);
@@ -63,7 +63,7 @@ export class EventsService {
 
     private getWFUserEvent(eventName): UserEvent {
         const eventKey = `${WF_EVENT_PREFIX}${eventName}`;
-        const filter = this.utilities.getEventFilter(this.atdName);
+        const filter = this.utilities.getEventFilter(this.atdUUID);
         const eventData = this.getWFEventData();
         return {
             EventKey: eventKey,
@@ -85,20 +85,20 @@ export class EventsService {
     private getTransactionLoadEvent(): UserEvent {
         return {
             ...TransactionScopeLoadEvent,
-            EventFilter: this.utilities.getEventFilter(this.atdName)
+            EventFilter: this.utilities.getEventFilter(this.atdUUID)
         }
     }
 
     private getTransactionLoadedEvent(): UserEvent {
         return {
             ...TransactionScopeLoadedEvent,
-            EventFilter: this.utilities.getEventFilter(this.atdName)
+            EventFilter: this.utilities.getEventFilter(this.atdUUID)
         }
     }
 
     private async getFieldChangeEvent(type: ObjectType): Promise<UserEvent> {
         const fields = await this.transactionsService.getFields(type);
-        const filter = this.utilities.getEventFilter(this.atdName);
+        const filter = this.utilities.getEventFilter(this.atdUUID);
         const event = type === 'transactions' ? OnTransactionFieldChangedEvent : OnTransactionLineFieldChangedEvent;
         return {
             ...event,
