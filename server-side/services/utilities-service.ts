@@ -21,4 +21,21 @@ export class UtilitiesService {
         }));
     }
       
+    async getRelations(whereClause: string) {
+        return await this.papiClient.addons.data.relations.find({where: whereClause})
+    }
+
+    async getAtd(uuid: string) {
+        return  await this.papiClient.types.find({
+            where: `UUID='${uuid}'`
+        }).then((types) => {
+            return types[0]
+        });
+    }
+
+    getEventFilter(atdName: string) {
+        return {
+            ObjectType: atdName
+        }
+    }
 }

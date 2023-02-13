@@ -1,10 +1,9 @@
-import { TranslateService } from '@ngx-translate/core';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
-import { PepAddonBlockLoaderService } from '@pepperi-addons/ngx-lib/remote-loader';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators'
 
 import { config } from '../addon.config'
+import { EventsService } from '../services/events.service';
 
 @Component({
     selector: 'activity-events',
@@ -27,80 +26,27 @@ export class ActivityEventsComponent implements OnInit, AfterViewInit {
     constructor(
         private activateRoute: ActivatedRoute,
         private router: Router,
+        private eventsService: EventsService,
         ) {
             this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
                 this.eventsBlockDev = this.activateRoute.snapshot.queryParams.events_dev === "true" || false;
                 if(this.eventsBlockDev) {
                     this.eventsBlockPath = 'http://localhost:4600/file_cbbc42ca-0f20-4ac8-b4c6-8f87ba7c16ad.js';
                 }
-                this.loaded = true;
             });
     }
 
     ngOnInit(): void {
-        const fields = [{
-            ApiName: 'TSAInventory',
-            Title: 'Invetory'
-        },
-        {
-            ApiName: 'UnitsQuantity',
-            Title: 'Quantity field'
-        },
-        {
-            ApiName: 'UnitPriceAfterDiscount',
-            Title: 'Price after discount'
-        }];
-        this.hostObject = {
-            ...this.hostObject,
-            AddonUUID: config.AddonUUID,
-            PossibleEvents: [{
-                Title: 'Setting field value',
-                EventKey: 'SetFieldValue',
-                EventFilter: {
-                    DataObject: {
-                        typeDefinition:{
-                            internalID:267286
-                        }
-                    }
-                },
-                Fields: fields
-            },
-            {
-                Title: 'Incrementing field\'s value',
-                EventKey: 'IncrementFieldValue',
-                EventFilter: {
-                    DataObject: {
-                        typeDefinition:{
-                            internalID:267286
-                        }
-                    }
-                },
-                Fields: fields
-            },
-            {
-                Title: 'before loading transaction scope',
-                EventKey: 'PreLoadTransactionScope',
-                EventFilter: {
-                    DataObject: {
-                        typeDefinition:{
-                            internalID:267286
-                        }
-                    }
-                },
-            },
-            {
-                Title: 'after transaction scope loaded',
-                EventKey: 'OnLoadTransactionScope',
-                EventFilter: {
-                    DataObject: {
-                        typeDefinition:{
-                            internalID:267286
-                        }
-                    }
-                },
-            }],
-            Name: '267286',
-        }
+        const atdUUID = this.hostObject.objectList[0];
+        this.eventsService.getTransactionEvents(atdUUID).then(events => {
+            this.hostObject = {
+                ...this.hostObject,
+                AddonUUID: config.AddonUUID,
+                PossibleEvents: events,
+                Name: atdUUID
+            }
+            this.loaded = true;
+        });
     }
 
     ngOnChanges(e: any): void {
