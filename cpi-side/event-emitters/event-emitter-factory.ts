@@ -9,8 +9,8 @@ import { TransactionScopeLoadEventEmitter } from "./transaction-scope-load-emitt
 import { TransactionScopeLoadedEventEmitter } from './transaction-scope-loaded-emitter';
 
 export class EventEmitterFactory {
-    static create(eventKey: string, params: InterceptorData): IEventEmitter {
-        let res: IEventEmitter;
+    static create(eventKey: string, params: InterceptorData): IEventEmitter | undefined {
+        let res: IEventEmitter | undefined = undefined;
         const dataObject = params.Data.DataObject as DataObject;
         switch (eventKey) {
             case 'PreLoadTransactionScope': {
@@ -27,7 +27,7 @@ export class EventEmitterFactory {
                 if (dataObject.resource === 'transactions') {
                     res = new TransactionFieldChangeEventEmitter(params);
                 }
-                else {
+                else if (dataObject.resource === 'transaction_lines') {
                     res = new TransactionLineFieldChangeEventEmitter(params);
                 }
                 break;

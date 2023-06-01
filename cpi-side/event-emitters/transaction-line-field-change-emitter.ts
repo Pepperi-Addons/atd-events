@@ -13,7 +13,6 @@ export class TransactionLineFieldChangeEventEmitter extends IEventEmitter {
         const oldValue = await dataObj.getFieldValue(this.params.Data.FieldID);
         await this.params.NextFunction(this.params.MainFunction);
         const newValue = await dataObj.getFieldValue(this.params.Data.FieldID);
-
         return {
             TransactionUUID: dataObj.transaction.uuid,
             TransactionLineUUID: dataObj.uuid,
