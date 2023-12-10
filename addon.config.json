@@ -20,5 +20,8 @@
     "CPISide": [
       "addon-cpi.ts"
     ]
+  },
+  "AddonPackage": {
+    "ClientZip": false,
   }
 }
