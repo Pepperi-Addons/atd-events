@@ -19,12 +19,16 @@ export class EventsService {
     async getTransactionEvents(): Promise<UserEvent[]> {
         const res: UserEvent[] = []
         this.atdName = await this.transactionsService.getName(this.atdUUID);
+        const atdType: number = await this.transactionsService.getType(this.atdUUID);
         const wfEvents = await this.getWFEvents();
-        const internalEvents = await this.getInternalTransactionEvents();
-        const relationsEvents = await this.relationsService.getTransactionsEvents(this.atdName);
         res.push(...wfEvents);
-        res.push(...internalEvents);
-        res.push(...relationsEvents);
+        // only if the type is transaction, add the transaction events to the result
+        if(atdType === 2) {
+            const internalEvents = await this.getInternalTransactionEvents();
+            const relationsEvents = await this.relationsService.getTransactionsEvents(this.atdName);
+            res.push(...internalEvents);
+            res.push(...relationsEvents);
+        }
         return res;
     }
 

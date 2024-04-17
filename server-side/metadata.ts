@@ -4,7 +4,7 @@ import { UserEvent } from "./entities";
 
 const filename = `file_${config.AddonUUID}`;
 
-export type ObjectType = 'transactions' | 'transaction_lines'
+export type ObjectType = 'transactions' | 'transaction_lines' | 'activities'
 
 export const WF_EVENT_PREFIX = 'WFAction';
 export const TSA_EVENT_PREFIX = 'TSAEmitEvent';
