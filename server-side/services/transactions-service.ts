@@ -36,6 +36,13 @@ export class TransactionsService {
         return this.atd?.Name || '';
     }
 
+    async getType(uuid: string): Promise<number> {
+        if (!this.atd) {
+            await this.initATD(uuid);
+        }
+        return this.atd?.Type || 99; // if the atd could not be found, consider is as activity type
+    }
+
     async getFields(type: ObjectType) {
         const atdID = await this.getInternalID(this.atdUUID);
         return await this.utilities.papiClient.metaData.type(type).types.subtype(atdID.toString()).fields.get();
@@ -50,7 +57,8 @@ export class TransactionsService {
     }
 
     async getWFEventFields() {
-        const booleanFields = await this.getBooleanFields('transactions');
+        const type: ObjectType = this.atd?.Type === 2 ? 'transactions' : 'activities';
+        const booleanFields = await this.getBooleanFields(type);
         const res = booleanFields.filter(field => field.FieldID.startsWith(TSA_EVENT_PREFIX));
         return res;
     }

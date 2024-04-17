@@ -20,6 +20,6 @@ export class SubscriptionService {
             MainFunction: main
         }
         const emitter = EventEmitterFactory.create(eventKey, interceptorData);
-        return await emitter.handleEvent();
+        return emitter ? await emitter.handleEvent() : undefined;
     }
 }
