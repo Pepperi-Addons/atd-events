@@ -41,9 +41,12 @@ export class ConfigurationsService {
 
     async upsertAndPublishDraft(draft: Draft): Promise<PostAndPublishDraftResponse> {
         try {
+            if (!draft.Key) {
+                throw new Error(`Draft key is missing for draft ${JSON.stringify(draft)}. The key should be the same as the ATD UUID.`);
+            }
             const upsertedDraft = await this.upsertDraft(draft);
             if (!upsertedDraft.Key) {
-                throw new Error(`Draft key is missing for draft ${JSON.stringify(upsertedDraft)}`);
+                throw new Error(`Draft key is missing for upserted draft ${JSON.stringify(upsertedDraft)}.`); // this shouldn't really happen, but just in case
             }
             const VersionKey = await this.publishDraft(upsertedDraft.Key);
             return {PublishedDraft: upsertedDraft, VersionKey: VersionKey.VersionKey};
