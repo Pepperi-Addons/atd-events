@@ -14,3 +14,10 @@ const eventTypes = [
 
 export type EventsNames = typeof eventTypes[number];
 export type PostAndPublishDraftResponse = { PublishedDraft: Draft, VersionKey: string }
+export interface ATDEvent {
+    EventTitle: string,
+    EventKey: EventsNames,
+    EventField: string,
+    EventFilter?: { [key: string]: any},
+    Flow: string,
+}
