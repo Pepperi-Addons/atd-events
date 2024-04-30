@@ -19,7 +19,7 @@ export class ConfigurationsService {
 
     private async upsertDraft(draft: Draft): Promise<Draft> {
         try {
-            console.log(`upsertDraft ${JSON.stringify(draft)}`)
+            console.log(`upsertDraft ${JSON.stringify(draft.Key)}`)
             return await this.papiClient.addons.configurations.addonUUID(AddonUUID).scheme(atdFlowsConfigurationSchemaName).drafts.upsert(draft);
         }
         catch (ex) {
