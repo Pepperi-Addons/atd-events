@@ -11,6 +11,8 @@ The error Message is importent! it will be written in the audit log and help the
 import { Client, Request } from '@pepperi-addons/debug-server'
 import { AtdRelations } from './metadata'
 import { UtilitiesService } from './services/utilities-service'
+import { atdFlowsConfigurationSchema } from 'shared';
+import semver from 'semver';
 
 export async function install(client: Client, request: Request): Promise<any> {
     return await createObjects(client);
@@ -21,7 +23,10 @@ export async function uninstall(client: Client, request: Request): Promise<any> 
 }
 
 export async function upgrade(client: Client, request: Request): Promise<any> {
-    return {success:true,resultObject:{}}
+    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '0.6.0') < 0) {
+        const service = new UtilitiesService(client);
+        await service.createConfigurationSchema(atdFlowsConfigurationSchema);
+    }
 }
 
 export async function downgrade(client: Client, request: Request): Promise<any> {
@@ -33,6 +38,7 @@ async function createObjects(client: Client) {
     try {
         const service = new UtilitiesService(client);
         await service.createRelations(AtdRelations);
+        await service.createConfigurationSchema(atdFlowsConfigurationSchema);
         return {
             success:true,
             resultObject: {}

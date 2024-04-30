@@ -1,4 +1,4 @@
-import { PapiClient, InstalledAddon } from '@pepperi-addons/papi-sdk'
+import { PapiClient, InstalledAddon, ConfigurationScheme } from '@pepperi-addons/papi-sdk'
 import { Client } from '@pepperi-addons/debug-server';
 
 export class UtilitiesService {
@@ -37,5 +37,9 @@ export class UtilitiesService {
         return {
             ObjectType: atdName
         }
+    }
+
+    async createConfigurationSchema(configurationScheme: ConfigurationScheme) {
+        return await this.papiClient.addons.configurations.schemes.upsert(configurationScheme)
     }
 }
