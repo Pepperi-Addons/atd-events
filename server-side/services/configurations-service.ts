@@ -28,7 +28,7 @@ export class ConfigurationsService {
         }
     }
 
-    private async publishDraft(draftKey: string): Promise<{VersionKey: string}> {
+    private async publishDraft(draftKey: string): Promise<{ VersionKey: string }> {
         try {
             console.log(`publishDraft ${draftKey}`)
             return await this.papiClient.addons.configurations.addonUUID(AddonUUID).scheme(atdFlowsConfigurationSchemaName).drafts.key(draftKey).publish();
@@ -39,7 +39,7 @@ export class ConfigurationsService {
         }
     }
 
-    async upsertAndPublishDraft(draft: Draft): Promise<PostAndPublishDraftResponse> {
+    async upsertAndPublishDraft(draft: Draft): Promise<Draft> {
         try {
             if (!draft.Key) {
                 throw new Error(`Draft key is missing for draft ${JSON.stringify(draft)}. The key should be the same as the ATD UUID.`);
@@ -48,8 +48,8 @@ export class ConfigurationsService {
             if (!upsertedDraft.Key) {
                 throw new Error(`Draft key is missing for upserted draft ${JSON.stringify(upsertedDraft)}.`); // this shouldn't really happen, but just in case
             }
-            const VersionKey = await this.publishDraft(upsertedDraft.Key);
-            return {PublishedDraft: upsertedDraft, VersionKey: VersionKey.VersionKey};
+            await this.publishDraft(upsertedDraft.Key);
+            return upsertedDraft;
 
         }
         catch (ex) {
