@@ -7,8 +7,7 @@ export const atdFlowsConfigurationSchemaName = 'ATDFlowsConfigurations';
 export const eventConfigurationFields = {
     Events: {
         Type: "Array",
-        /* SubType: ATDEvent // this is not supported in the SDK, but it should at least be documented
-        */
+        /* SubType: ATDEvent // this is not supported in the SDK, but it should at least be documented */
     },
 } as any;
 

@@ -1,5 +1,3 @@
-import { Draft } from "@pepperi-addons/papi-sdk"
-
 export const PRE_LOAD_TRANSACTION_SCOPE_EVENT_KEY = 'OnTransactionLoad'
 export const ON_LOAD_TRANSACTION_SCOPE_EVENT_KEY = 'OnTransactionLoaded'
 export const TRANSACTION_FIELD_CHANGE_EVENT_KEY = 'OnTransactionFieldChanged'
@@ -13,7 +11,6 @@ const eventTypes = [
 ] as const
 
 export type EventsNames = typeof eventTypes[number];
-export type PostAndPublishDraftResponse = { PublishedDraft: Draft, VersionKey: string }
 export interface ATDEvent {
     EventTitle: string,
     EventKey: EventsNames,
