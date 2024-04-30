@@ -6,13 +6,10 @@ import { AddonUUID } from '../../addon.config.json';
 export const atdFlowsConfigurationSchemaName = 'ATDFlowsConfigurations';
 
 export const eventConfigurationFields = {
-    ATDUUID: {
-        Type: "String",
-    },
     Events: {
         Type: "Array",
         /* SubType: { // this is not supported in the SDK, but it should at least be documented
-            Title: {
+            EventTitle: {
                 Type: "String",
             },
             EventKey: {
