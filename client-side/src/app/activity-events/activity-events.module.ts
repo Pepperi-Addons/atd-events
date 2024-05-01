@@ -10,23 +10,31 @@ import { ActivityEventsComponent } from './index';
 
 import { config } from '../addon.config';
 import { EventsService } from '../services/events.service';
-
+import { PepGenericListModule } from '@pepperi-addons/ngx-composite-lib/generic-list';
+import { PepPageLayoutModule } from '@pepperi-addons/ngx-lib/page-layout';
+import { PepSizeDetectorModule } from '@pepperi-addons/ngx-lib/size-detector';
+import { PepButtonModule } from '@pepperi-addons/ngx-lib/button';
+import { PepTopBarModule } from '@pepperi-addons/ngx-lib/top-bar';
 export const routes: Routes = [
     {
         path: '',
         component: ActivityEventsComponent
     }
 ];
-
 @NgModule({
     declarations: [ActivityEventsComponent],
     imports: [
         CommonModule,
         PepRemoteLoaderModule,
+        PepGenericListModule,
+        PepPageLayoutModule,
+        PepButtonModule,
+        PepSizeDetectorModule,
+        PepTopBarModule,
         TranslateModule.forChild({
             loader: {
                 provide: TranslateLoader,
-                useFactory: (addonService: PepAddonService) => 
+                useFactory: (addonService: PepAddonService) =>
                     PepAddonService.createMultiTranslateLoader(config.AddonUUID, addonService, ['ngx-lib', 'ngx-composite-lib']),
                 deps: [PepAddonService]
             }, isolate: false

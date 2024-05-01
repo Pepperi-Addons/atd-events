@@ -15,4 +15,8 @@ export class EventsService {
         });
     }
 
+    async getEvents(draftKey: string): Promise<number> {
+        return await this.addonService.getAddonApiCall(config.AddonUUID, 'api', `get_events?draft_key=${draftKey}`).toPromise();
+    }
+
 }
