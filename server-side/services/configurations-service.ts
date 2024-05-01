@@ -1,7 +1,7 @@
 import { PapiClient, Draft } from '@pepperi-addons/papi-sdk'
 import { Client } from '@pepperi-addons/debug-server';
 import { AddonUUID } from '../../addon.config.json';
-import { atdFlowsConfigurationSchemaName, PostAndPublishDraftResponse } from 'shared';
+import { ATDEvent, atdFlowsConfigurationSchemaName } from 'shared';
 
 export class ConfigurationsService {
 
@@ -54,6 +54,18 @@ export class ConfigurationsService {
         }
         catch (ex) {
             console.error(`Error in upsertAndPublishDraft ${ex}`)
+            throw ex;
+        }
+    }
+
+    async getATDEvents(atdUUID: string): Promise<ATDEvent[]> {
+        try {
+            const draft:Draft = await this.papiClient.addons.configurations.addonUUID(AddonUUID).scheme(atdFlowsConfigurationSchemaName).drafts.key(atdUUID).get();
+            const atdEvents: ATDEvent[] = draft.Data.Events as ATDEvent[];
+            return atdEvents;
+        }
+        catch (ex) {
+            console.error(`Error in getATDEvents ${ex}`)
             throw ex;
         }
     }

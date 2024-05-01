@@ -22,9 +22,25 @@ export async function get_transactions_events(client: Client, request: Request) 
 export async function draft(client: Client, request: Request) {
     switch (request.method) {
         case 'POST': {
-            const service: ConfigurationsService = new ConfigurationsService(client);
+            const configurationsService: ConfigurationsService = new ConfigurationsService(client);
             const draft = request.body as Draft;
-            return await service.upsertAndPublishDraft(draft);
+            return await configurationsService.upsertAndPublishDraft(draft);
+        }
+        default: {
+            throw new Error(`${request.method} not supported`);
+        }
+    }
+}
+
+export async function get_events(client: Client, request: Request) {
+    switch (request.method) {
+        case 'GET': {
+            const configurationsService: ConfigurationsService = new ConfigurationsService(client);
+            const draftKey = request.query.draft_key;
+            if (!draftKey) {
+                throw new Error('draft_key is a required query parameter for this endpoint.');
+            }
+            return await configurationsService.getATDEvents(draftKey);
         }
         default: {
             throw new Error(`${request.method} not supported`);
