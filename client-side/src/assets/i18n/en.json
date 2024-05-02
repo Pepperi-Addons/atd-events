@@ -1,3 +1,6 @@
 {
-    "Block_Title": "Block title"
+    "Block_Title": "Block title",
+    "ActivityList_DataView_EventTitle_Title": "Event Title",
+    "ActivityList_DataView_EventField_Title": "Event Field",
+    "ActivityList_DataView_FlowName_Title": "Flow Name"
 }

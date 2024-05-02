@@ -16,9 +16,9 @@
             </pep-top-bar>
             <ng-container pep-main-area>
                 <pep-generic-list [addPadding]="true" [dataSource]="listDataSource" uuidMapping="UUID"
-                    [showTopBar]="true" [inline]="false" [showSearch]="false"
+                    [showTopBar]="true" [inline]="true" [showSearch]="false"
                     noDataFoundMsg="No data found" [supportSorting]="false" [selectionType]="'single'"
-                    [actions]="actions" tableViewType="compact">
+                    [actions]="actions">
                 </pep-generic-list>
             </ng-container>
         </div>

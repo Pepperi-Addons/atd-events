@@ -19,7 +19,7 @@ export async function install(client: Client, request: Request): Promise<any> {
 }
 
 export async function uninstall(client: Client, request: Request): Promise<any> {
-    return {success:true,resultObject:{}}
+    return { success: true, resultObject: {} }
 }
 
 export async function upgrade(client: Client, request: Request): Promise<any> {
@@ -27,10 +27,14 @@ export async function upgrade(client: Client, request: Request): Promise<any> {
         const service = new UtilitiesService(client);
         await service.createConfigurationSchema(atdFlowsConfigurationSchema);
     }
+    else {
+        return { success: true, resultObject: {} }
+
+    }
 }
 
 export async function downgrade(client: Client, request: Request): Promise<any> {
-    return {success:true,resultObject:{}}
+    return { success: true, resultObject: {} }
 }
 
 
@@ -40,14 +44,14 @@ async function createObjects(client: Client) {
         await service.createRelations(AtdRelations);
         await service.createConfigurationSchema(atdFlowsConfigurationSchema);
         return {
-            success:true,
+            success: true,
             resultObject: {}
         }
-    } 
+    }
     catch (err) {
-        return { 
-            success: false, 
-            resultObject: err , 
+        return {
+            success: false,
+            resultObject: err,
             errorMessage: `Error in creating necessary objects . error - ${err}`
         };
     }

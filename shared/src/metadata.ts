@@ -13,10 +13,14 @@ const eventTypes = [
 ] as const
 
 export type EventsNames = typeof eventTypes[number];
-export interface ATDEvent {
+export interface ATDEventForDraft {
     EventTitle: string,
     EventKey: EventsNames,
     EventField: string,
-    EventFilter?: { [key: string]: any},
-    Flow: string,
+    EventFilter?: { [key: string]: any },
+    FlowKey: string,
+}
+
+export interface ATDEventForUI extends ATDEventForDraft {
+    FlowName: string,
 }

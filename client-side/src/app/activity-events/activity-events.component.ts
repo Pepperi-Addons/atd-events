@@ -14,9 +14,9 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./activity-events.component.scss']
 })
 export class ActivityEventsComponent implements OnInit, AfterViewInit {
-createClicked($event: any) {
-throw new Error('Method not implemented.');
-}
+  createClicked($event: any) {
+    throw new Error('Method not implemented.');
+  }
   @Input() hostObject: any;
 
   @Output() hostEvents: EventEmitter<any> = new EventEmitter<any>();
@@ -76,26 +76,26 @@ throw new Error('Method not implemented.');
             ScreenSize: 'Landscape'
           },
           Type: 'Grid',
-          Title: 'Health Monitor Dashboard',
+          Title: 'Events Flows list',
           Fields: [
             {
               FieldID: 'EventTitle',
               Type: 'TextBox',
-              Title: 'Event Title',
+              Title: await this.translate.get("ActivityList_DataView_EventTitle_Title").toPromise(),
               Mandatory: true,
               ReadOnly: true
             },
             {
               FieldID: 'EventField',
               Type: 'TextBox',
-              Title: 'Event Field',
+              Title: await this.translate.get("ActivityList_DataView_EventField_Title").toPromise(),
               Mandatory: false,
               ReadOnly: true
             },
             {
-              FieldID: 'Flow',
+              FieldID: 'FlowName',
               Type: 'TextBox',
-              Title: 'Flow Key',
+              Title: await this.translate.get("ActivityList_DataView_FlowName_Title").toPromise(),
               Mandatory: true,
               ReadOnly: true
             }
@@ -119,14 +119,6 @@ throw new Error('Method not implemented.');
         totalCount: this.items.length
       });
     },
-    // update: async (params: any) => {
-    //   let items = await this.addonService.initInternalSyncData(params, this.searchAfter);
-    //   this.searchAfter = items.searchAfter;
-    //   this.size = items.size;
-    //   this.items = items.data;
-
-    //   return Promise.resolve(this.items);
-    // }
   }
 
   actions: IPepGenericListActions = {
