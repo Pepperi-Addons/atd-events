@@ -7,7 +7,7 @@ import { PepAddonService, PepNgxLibModule } from '@pepperi-addons/ngx-lib';
 import { config } from './addon.config';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslateLoader, TranslateModule, TranslateStore } from '@ngx-translate/core';
-import { ActivityFlowsModule } from './activity-flows';
+import { ActivityFlowsComponent, ActivityFlowsModule } from './activity-flows';
 
 @Component({
     selector: 'app-empty-route',
@@ -52,5 +52,6 @@ export class AppModule implements DoBootstrap {
 
     ngDoBootstrap(): void {
         this.addonService.defineCustomElement(`atd-events-element-${config.AddonUUID}`, ActivityEventsComponent, this.injector);
+        this.addonService.defineCustomElement(`atd-flows-element-${config.AddonUUID}`, ActivityFlowsComponent, this.injector);
     }
 }
