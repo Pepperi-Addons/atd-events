@@ -1,6 +1,11 @@
 {
     "Block_Title": "Block title",
-    "ActivityList_DataView_EventTitle_Title": "Event Title",
+    "ActivityList_DataView_EventTitle_Title": "Event Name",
     "ActivityList_DataView_EventField_Title": "Event Field",
-    "ActivityList_DataView_FlowName_Title": "Flow Name"
+    "ActivityList_DataView_FlowName_Title": "Flow Name",
+    "OnTransactionLoaded_EventName": "Transaction Loaded",
+    "OnTransactionLoad_EventName": "Transaction Loading",
+    "OnTransactionFieldChanged_EventName": "Transaction Field {{fieldID}} Changed",
+    "OnTransactionLineFieldChanged_EventName": "Transaction Line Field {{fieldID}} Changed",
+    "Unknown_EventName": "Unknown Event"
 }

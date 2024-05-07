@@ -59,7 +59,7 @@ export class ConfigurationsService {
     }
 
     async addFlowNameToATDEvents(atdEvents: ATDEventForDraft[]): Promise<ATDEventForUI[]> {
-        const flowKeys = atdEvents.map(event => event.FlowKey);
+        const flowKeys = atdEvents.map(event => event.Flow.FlowKey);
         try {
             // get the flows
             const flows = (await this.papiClient.userDefinedFlows.search({ KeyList: flowKeys })).Objects;
@@ -74,7 +74,7 @@ export class ConfigurationsService {
             const atdEventsForUI = atdEvents.map(event => {
                 return {
                     ...event,
-                    FlowName: flowsKeysToNames[event.FlowKey]
+                    FlowName: flowsKeysToNames[event.Flow.FlowKey]
                 }
             });
 
@@ -85,6 +85,25 @@ export class ConfigurationsService {
             throw ex;
         }
     }
+
+    // this actually modifies the events in the draft to include the flow name
+    async getDraft(draftKey: string): Promise<Draft> {
+        try {
+            const draft: Draft = await this.papiClient.addons.configurations.addonUUID(AddonUUID).scheme(atdFlowsConfigurationSchemaName).drafts.key(draftKey).get();
+            const atdEvents: ATDEventForDraft[] = draft.Data.Events as ATDEventForDraft[];
+            if (!atdEvents) {
+                throw new Error(`Events are missing for draft ${draftKey}.`);
+            }
+            const atdEventsForUI = await this.addFlowNameToATDEvents(atdEvents);
+            draft.Data.Events = atdEventsForUI;
+            return draft;
+        }
+        catch (ex) {
+            console.error(`Error in getDraft ${ex}`)
+            throw ex;
+        }
+    }
+
 
     async getATDEvents(atdUUID: string): Promise<ATDEventForUI[]> {
         try {

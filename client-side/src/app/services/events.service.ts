@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { PepAddonService } from "@pepperi-addons/ngx-lib";
 import { config } from "../addon.config";
+import { Draft } from "@pepperi-addons/papi-sdk";
 
 @Injectable()
 export class EventsService {
@@ -15,8 +16,12 @@ export class EventsService {
         });
     }
 
-    async getEvents(draftKey: string): Promise<number> {
+    async getEvents(draftKey: string): Promise<any> {
         return await this.addonService.getAddonApiCall(config.AddonUUID, 'api', `get_events?draft_key=${draftKey}`).toPromise();
+    }
+
+    async getDraft(draftKey: string): Promise<Draft> {
+        return await this.addonService.getAddonApiCall(config.AddonUUID, 'api', `draft?draft_key=${draftKey}`).toPromise();
     }
 
 }

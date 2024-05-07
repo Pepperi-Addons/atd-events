@@ -26,6 +26,14 @@ export async function draft(client: Client, request: Request) {
             const draft = request.body as Draft;
             return await configurationsService.upsertAndPublishDraft(draft);
         }
+        case 'GET': {
+            const configurationsService: ConfigurationsService = new ConfigurationsService(client);
+            const draftKey = request.query.draft_key;
+            if (!draftKey) {
+                throw new Error('draft_key is a required query parameter for this endpoint.');
+            }
+            return await configurationsService.getDraft(draftKey);
+        }
         default: {
             throw new Error(`${request.method} not supported`);
         }
