@@ -9,35 +9,62 @@ export type ObjectType = 'transactions' | 'transaction_lines' | 'activities'
 export const WF_EVENT_PREFIX = 'WFAction';
 export const TSA_EVENT_PREFIX = 'TSAEmitEvent';
 
-export const AtdRelations: Relation[] = [{   
+export const AtdRelations: Relation[] = [{
     //meta data for realtion of type NgComponent
     RelationName: "TransactionTypeListTabs",
     AddonUUID: config.AddonUUID,
-    Name:"EventsRelations",
-    Description:"events",
+    Name: "EventsRelations",
+    Description: "events",
     SubType: "NG14",
     ModuleName: "ActivityEventsModule",
     ComponentName: "ActivityEventsComponent",
-    Type:"NgComponent",
-    AddonRelativeURL:filename,
+    Type: "NgComponent",
+    AddonRelativeURL: filename,
     ElementsModule: 'WebComponents',
     ElementName: `atd-events-element-${config.AddonUUID}`
 },
 {   //meta data for realtion of type NgComponent
     RelationName: "ActivityTypeListTabs",
     AddonUUID: config.AddonUUID,
-    Name:"EventsRelations",
-    Description:"events",
+    Name: "EventsRelations",
+    Description: "events",
     SubType: "NG14",
     ModuleName: "ActivityEventsModule",
     ComponentName: "ActivityEventsComponent",
-    Type:"NgComponent",
-    AddonRelativeURL:filename,
+    Type: "NgComponent",
+    AddonRelativeURL: filename,
     ElementsModule: 'WebComponents',
     ElementName: `atd-events-element-${config.AddonUUID}`
+},
+{
+    //meta data for realtion of type NgComponent
+    RelationName: "TransactionTypeListTabs",
+    AddonUUID: config.AddonUUID,
+    Name: "EventsFlowsRelations",
+    Description: "events",
+    SubType: "NG14",
+    ModuleName: "ActivityFlowsModule",
+    ComponentName: "ActivityFlowsComponent",
+    Type: "NgComponent",
+    AddonRelativeURL: filename,
+    ElementsModule: 'WebComponents',
+    ElementName: `atd-flows-element-${config.AddonUUID}`
+},
+{   //meta data for realtion of type NgComponent
+    RelationName: "ActivityTypeListTabs",
+    AddonUUID: config.AddonUUID,
+    Name: "EventsFlowsRelations",
+    Description: "events",
+    SubType: "NG14",
+    ModuleName: "ActivityFlowsModule",
+    ComponentName: "ActivityFlowsComponent",
+    Type: "NgComponent",
+    AddonRelativeURL: filename,
+    ElementsModule: 'WebComponents',
+    ElementName: `atd-flows-element-${config.AddonUUID}`
 }]
 
-export const TransactionScopeLoadEvent: UserEvent =  {
+export const TransactionScopeLoadEvent: UserEvent = {
     EventKey: 'OnTransactionLoad',
     Title: 'transaction loading',
     EventData: {
@@ -48,7 +75,7 @@ export const TransactionScopeLoadEvent: UserEvent =  {
     EventFilter: {}
 }
 
-export const TransactionScopeLoadedEvent: UserEvent =  {
+export const TransactionScopeLoadedEvent: UserEvent = {
     EventKey: 'OnTransactionLoaded',
     Title: 'transaction loaded',
     EventData: {
@@ -58,7 +85,7 @@ export const TransactionScopeLoadedEvent: UserEvent =  {
     },
     EventFilter: {}
 }
-export const OnTransactionFieldChangedEvent: UserEvent =  {
+export const OnTransactionFieldChangedEvent: UserEvent = {
     EventKey: 'OnTransactionFieldChanged',
     Title: 'transaction field changed',
     EventData: {
@@ -78,7 +105,7 @@ export const OnTransactionFieldChangedEvent: UserEvent =  {
     EventFilter: {}
 }
 
-export const OnTransactionLineFieldChangedEvent: UserEvent =  {
+export const OnTransactionLineFieldChangedEvent: UserEvent = {
     EventKey: 'OnTransactionLineFieldChanged',
     Title: 'transaction line field changed',
     EventData: {
