@@ -7,12 +7,13 @@ import { PepAddonService, PepNgxLibModule } from '@pepperi-addons/ngx-lib';
 import { config } from './addon.config';
 import { HttpClientModule } from '@angular/common/http';
 import { TranslateLoader, TranslateModule, TranslateStore } from '@ngx-translate/core';
+import { ActivityFlowsComponent, ActivityFlowsModule } from './activity-flows';
 
 @Component({
     selector: 'app-empty-route',
     template: '<div>Route is not exist.</div>',
 })
-export class EmptyRouteComponent {}
+export class EmptyRouteComponent { }
 
 const routes: Routes = [
     { path: '**', component: EmptyRouteComponent }
@@ -24,10 +25,11 @@ const routes: Routes = [
         HttpClientModule,
         PepNgxLibModule,
         ActivityEventsModule,
+        ActivityFlowsModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
-                useFactory: (addonService: PepAddonService) => 
+                useFactory: (addonService: PepAddonService) =>
                     PepAddonService.createMultiTranslateLoader(config.AddonUUID, addonService, ['ngx-lib', 'ngx-composite-lib']),
                 deps: [PepAddonService]
             }
@@ -35,7 +37,7 @@ const routes: Routes = [
         RouterModule.forRoot(routes)
     ],
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     providers: [
         TranslateStore
@@ -50,5 +52,6 @@ export class AppModule implements DoBootstrap {
 
     ngDoBootstrap(): void {
         this.addonService.defineCustomElement(`atd-events-element-${config.AddonUUID}`, ActivityEventsComponent, this.injector);
+        this.addonService.defineCustomElement(`atd-flows-element-${config.AddonUUID}`, ActivityFlowsComponent, this.injector);
     }
- }
+}
