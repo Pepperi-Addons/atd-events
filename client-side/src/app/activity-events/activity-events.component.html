@@ -1,8 +1,9 @@
 <pep-page-layout [addPadding]="true">
     <ng-container pep-main-area>
         <div>
+            <p>{{'Activity_Events_Deprecated_Message' | translate}}</p>
             <pep-addon-block-loader *ngIf="loaded" [remoteEntry]="eventsBlockPath" name="UserDefinedEvents"
-                [hostObject]="hostObject">
+                [hostObject]="hostObject" >
             </pep-addon-block-loader>
         </div>
     </ng-container>

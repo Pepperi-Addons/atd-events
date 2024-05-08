@@ -10,11 +10,11 @@ export const WF_EVENT_PREFIX = 'WFAction';
 export const TSA_EVENT_PREFIX = 'TSAEmitEvent';
 
 export const AtdRelations: Relation[] = [{
-    //meta data for realtion of type NgComponent
+    //meta data for relation of type NgComponent
     RelationName: "TransactionTypeListTabs",
     AddonUUID: config.AddonUUID,
     Name: "EventsRelations",
-    Description: "events",
+    Description: "Events (Deprecated)",
     SubType: "NG14",
     ModuleName: "ActivityEventsModule",
     ComponentName: "ActivityEventsComponent",
@@ -23,11 +23,11 @@ export const AtdRelations: Relation[] = [{
     ElementsModule: 'WebComponents',
     ElementName: `atd-events-element-${config.AddonUUID}`
 },
-{   //meta data for realtion of type NgComponent
+{   //meta data for relation of type NgComponent
     RelationName: "ActivityTypeListTabs",
     AddonUUID: config.AddonUUID,
     Name: "EventsRelations",
-    Description: "events",
+    Description: "Events (Deprecated)",
     SubType: "NG14",
     ModuleName: "ActivityEventsModule",
     ComponentName: "ActivityEventsComponent",
@@ -37,11 +37,11 @@ export const AtdRelations: Relation[] = [{
     ElementName: `atd-events-element-${config.AddonUUID}`
 },
 {
-    //meta data for realtion of type NgComponent
+    //meta data for relation of type NgComponent
     RelationName: "TransactionTypeListTabs",
     AddonUUID: config.AddonUUID,
     Name: "EventsFlowsRelations",
-    Description: "events",
+    Description: "Events",
     SubType: "NG14",
     ModuleName: "ActivityFlowsModule",
     ComponentName: "ActivityFlowsComponent",
@@ -50,11 +50,11 @@ export const AtdRelations: Relation[] = [{
     ElementsModule: 'WebComponents',
     ElementName: `atd-flows-element-${config.AddonUUID}`
 },
-{   //meta data for realtion of type NgComponent
+{   //meta data for relation of type NgComponent
     RelationName: "ActivityTypeListTabs",
     AddonUUID: config.AddonUUID,
     Name: "EventsFlowsRelations",
-    Description: "events",
+    Description: "Events",
     SubType: "NG14",
     ModuleName: "ActivityFlowsModule",
     ComponentName: "ActivityFlowsComponent",

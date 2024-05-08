@@ -23,7 +23,7 @@ export async function uninstall(client: Client, request: Request): Promise<any> 
 }
 
 export async function upgrade(client: Client, request: Request): Promise<any> {
-    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '0.6.6') < 0) {
+    if (request.body.FromVersion && semver.compare(request.body.FromVersion, '0.6.8') < 0) {
         const service = new UtilitiesService(client);
         await service.createConfigurationSchema(atdFlowsConfigurationSchema);
         return await createObjects(client);
