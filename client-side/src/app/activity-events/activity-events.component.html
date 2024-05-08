@@ -5,26 +5,7 @@
                 [hostObject]="hostObject">
             </pep-addon-block-loader>
         </div>
-
-        <div>
-            <pep-top-bar title="Events Flows list" >
-                <div header-end-content>
-                    <pep-button [value]="'Add' | translate" styleType="strong" sizeType="md" iconPosition="start"
-                        (buttonClick)="createClicked($event)">
-                    </pep-button>
-                </div>
-            </pep-top-bar>
-            <ng-container pep-main-area>
-                <pep-generic-list [addPadding]="true" [dataSource]="listDataSource" uuidMapping="UUID"
-                    [showTopBar]="true" [inline]="true" [showSearch]="false"
-                    noDataFoundMsg="No data found" [supportSorting]="false" [selectionType]="'single'"
-                    [actions]="actions">
-                </pep-generic-list>
-            </ng-container>
-        </div>
-
     </ng-container>
-
 </pep-page-layout>
 
 <pep-size-detector></pep-size-detector>

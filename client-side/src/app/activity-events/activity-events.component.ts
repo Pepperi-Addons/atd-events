@@ -4,8 +4,6 @@ import { filter } from 'rxjs/operators'
 
 import { config } from '../addon.config'
 import { EventsService } from '../services/events.service';
-import { IPepGenericListActions, IPepGenericListDataSource, IPepGenericListParams } from '@pepperi-addons/ngx-composite-lib/generic-list';
-import { PepSelectionData } from '@pepperi-addons/ngx-lib/list';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -14,9 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./activity-events.component.scss']
 })
 export class ActivityEventsComponent implements OnInit, AfterViewInit {
-  createClicked($event: any) {
-    throw new Error('Method not implemented.');
-  }
+
   @Input() hostObject: any;
 
   @Output() hostEvents: EventEmitter<any> = new EventEmitter<any>();
@@ -27,7 +23,6 @@ export class ActivityEventsComponent implements OnInit, AfterViewInit {
   eventsBlockPath = '';
   eventsBlockDev = false;
   loaded = false;
-  items;
 
 
   constructor(
@@ -62,83 +57,5 @@ export class ActivityEventsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-  }
-
-  listDataSource: IPepGenericListDataSource = {
-    init: async (parameters: IPepGenericListParams) => {
-      this.items = await this.eventsService.getEvents(this.hostObject.objectList[0]);
-
-      return Promise.resolve({
-        dataView: {
-          Context: {
-            Name: '',
-            Profile: { InternalID: 0 },
-            ScreenSize: 'Landscape'
-          },
-          Type: 'Grid',
-          Title: 'Events Flows list',
-          Fields: [
-            {
-              FieldID: 'EventTitle',
-              Type: 'TextBox',
-              Title: await this.translate.get("ActivityList_DataView_EventTitle_Title").toPromise(),
-              Mandatory: true,
-              ReadOnly: true
-            },
-            {
-              FieldID: 'EventField',
-              Type: 'TextBox',
-              Title: await this.translate.get("ActivityList_DataView_EventField_Title").toPromise(),
-              Mandatory: false,
-              ReadOnly: true
-            },
-            {
-              FieldID: 'FlowName',
-              Type: 'TextBox',
-              Title: await this.translate.get("ActivityList_DataView_FlowName_Title").toPromise(),
-              Mandatory: true,
-              ReadOnly: true
-            }
-
-          ],
-          Columns: [
-            {
-              Width: 10
-            },
-            {
-              Width: 10
-            },
-            {
-              Width: 10
-            }
-          ],
-          FrozenColumnsCount: 0,
-          MinimumColumnWidth: 0
-        },
-        items: this.items,
-        totalCount: this.items.length
-      });
-    },
-  }
-
-  actions: IPepGenericListActions = {
-    get: async (data: PepSelectionData) => {
-      if (data.rows.length) {
-        return [{
-          title: this.translate.instant("Edit"),
-          handler: async (objs) => {
-            // when this is implemented - need to open dialog with the flow selection
-            // reminder - the selected event is in objs.rows[0]
-          }
-        },
-        {
-          title: this.translate.instant("Delete"),
-          handler: async (objs) => {
-            // when this is implemented - need to delete the selected event
-            // reminder - the selected event is in objs.rows[0]
-          }
-        }]
-      } else return []
-    }
   }
 }
