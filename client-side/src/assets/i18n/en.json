@@ -8,5 +8,6 @@
     "OnTransactionFieldChanged_EventName": "Transaction Field {{fieldID}} Changed",
     "OnTransactionLineFieldChanged_EventName": "Transaction Line Field {{fieldID}} Changed",
     "Unknown_EventName": "Unknown Event",
-    "Activity_Events_Deprecated_Message": "This tab is deprecated. Please refrain from editing data here. Instead, make sure to use the other 'Events' tab."
+    "Activity_Events_Deprecated_Message": "This tab is deprecated. Please refrain from editing data here. Instead, make sure to use the other 'Events' tab.",
+    "Event_Flows_List_Title": "Events Flows List"
 }
