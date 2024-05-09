@@ -5,9 +5,9 @@
     "ActivityList_DataView_FlowName_Title": "Flow Name",
     "OnTransactionLoaded_EventName": "Transaction Loaded",
     "OnTransactionLoad_EventName": "Transaction Loading",
-    "OnTransactionFieldChanged_EventName": "Transaction Field {{fieldID}} Changed",
-    "OnTransactionLineFieldChanged_EventName": "Transaction Line Field {{fieldID}} Changed",
-    "Unknown_EventName": "Unknown Event",
     "Activity_Events_Deprecated_Message": "This tab is deprecated. Please refrain from editing data here. Instead, make sure to use the other 'Events' tab.",
-    "Event_Flows_List_Title": "Events Flows List"
+    "Event_Flows_List_Title": "Events Flows List",
+    "OnTransactionFieldChanged_EventName": "Transaction Field Changed",
+    "OnTransactionLineFieldChanged_EventName": "Transaction Line Field Changed",
+    "Unknown_EventName": "Unknown Event"
 }
