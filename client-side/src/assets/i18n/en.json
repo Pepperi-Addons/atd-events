@@ -8,5 +8,13 @@
     "OnTransactionFieldChanged_EventName": "Transaction Field {{fieldID}} Changed",
     "OnTransactionLineFieldChanged_EventName": "Transaction Line Field {{fieldID}} Changed",
     "Unknown_EventName": "Unknown Event",
-    "Activity_Events_Deprecated_Message": "This tab is deprecated. Please refrain from editing data here. Instead, make sure to use the other 'Events' tab."
+    "Activity_Events_Deprecated_Message": "This tab is deprecated. Please refrain from editing data here. Instead, make sure to use the other 'Events' tab.",
+    "AddDialog_Title": "Add event",
+    "AddDialog_SubTitle": "define the event",
+    "AddDialog_Event_Label": "Event",
+    "AddDialog_Field_Label": "Field",
+    "AddDialog_CancelButton": "Back to list",
+    "AddDialog_UpdateButton": "Update",
+    "AddDialog_Failure_Title": "Creation failed",
+    "AddDialog_Failure_Content": "Failed to create event. please try again later."
 }

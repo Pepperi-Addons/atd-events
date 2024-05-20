@@ -1,0 +1,41 @@
+<pep-dialog [title]="'AddDialog_Title' | translate">
+    <ng-container pep-dialog-content>
+        <p>{{'AddDialog_SubTitle'|translate}}</p>
+        <pep-select
+            [(value)]="eventKey"
+            [label]="'AddDialog_Event_Label' | translate"
+            [mandatory]="true"
+            [options]="possibleEvents"
+            (valueChange)="eventKeyChanged($event)"
+            [emptyOption]="false"
+            ></pep-select>
+            <pep-select
+            [(value)]="eventField"
+            [label]="'AddDialog_Field_Label' | translate"
+            [mandatory]="true"
+            [options]="possibleFields"
+            [disabled]="!eventSupportsField"
+            (valueChange)="isValid=true"
+            [emptyOption]="false"
+        ></pep-select>
+    </ng-container>
+    <ng-container pep-dialog-actions>
+        <div class="pep-spacing-element-negative" style="display: flex;">         
+            <pep-button 
+                class="pep-spacing-element"
+                [sizeType]="'md'" 
+                [value]="'AddDialog_CancelButton' | translate" 
+                [styleType]="'weak'" 
+                (buttonClick)="close()"
+            ></pep-button>
+            <pep-button 
+                class="pep-spacing-element"
+                [sizeType]="'md'" 
+                [value]="'AddDialog_UpdateButton' | translate" 
+                [styleType]="'strong'" 
+                (buttonClick)="createEvent()"
+                [disabled]="!isValid"
+            ></pep-button>
+        </div>
+    </ng-container>
+</pep-dialog>

@@ -2,6 +2,7 @@ import { PapiClient, Draft } from '@pepperi-addons/papi-sdk'
 import { Client } from '@pepperi-addons/debug-server';
 import { AddonUUID } from '../../addon.config.json';
 import { ATDEventForDraft, ATDEventForUI, atdFlowsConfigurationSchemaName } from 'shared';
+import { TransactionsService } from './transactions-service';
 
 export class ConfigurationsService {
 
@@ -99,6 +100,21 @@ export class ConfigurationsService {
             return draft;
         }
         catch (ex) {
+            if ((ex as Error).message.indexOf('Object ID does not exist') > 0) {
+                const transactionsService = new TransactionsService(this.client, draftKey);
+                const atdName = await transactionsService.getName(draftKey);
+                return {
+                    AddonUUID: AddonUUID,
+                    ConfigurationSchemaName: atdFlowsConfigurationSchemaName,
+                    Key: draftKey,
+                    Name: atdName,
+                    Description: `draft object for ATD ${atdName}`,
+                    Data: {
+                        Events: []
+                    },
+                    Profiles: []
+                }
+            }
             console.error(`Error in getDraft ${ex}`)
             throw ex;
         }

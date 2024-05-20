@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { PepAddonService } from "@pepperi-addons/ngx-lib";
 import { config } from "../addon.config";
 import { Draft } from "@pepperi-addons/papi-sdk";
+import { ATDEventForDraft } from "shared";
 
 @Injectable()
 export class EventsService {
@@ -24,4 +25,7 @@ export class EventsService {
         return await this.addonService.getAddonApiCall(config.AddonUUID, 'api', `draft?draft_key=${draftKey}`).toPromise();
     }
 
+    async upsertEvent(eventObj: ATDEventForDraft) {
+        
+    }
 }

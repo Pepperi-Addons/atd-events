@@ -4,7 +4,10 @@ import { IPepGenericListDataSource, IPepGenericListParams, IPepGenericListAction
 import { PepSelectionData } from '@pepperi-addons/ngx-lib/list';
 import { EventsService } from '../services/events.service';
 import { Draft } from '@pepperi-addons/papi-sdk';
-import { EventType } from "shared";
+import { ATDEventForDraft, EventType, groupBy } from "shared";
+import { CreateFormData, UserEvent } from '../entities';
+import { AddFormComponent } from './add-form/add-form.component';
+import { PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
 
 @Component({
   selector: 'activity-flows',
@@ -13,9 +16,7 @@ import { EventType } from "shared";
 })
 export class ActivityFlowsComponent implements OnInit {
 
-  createClicked($event: any) {
-    throw new Error('Method not implemented.');
-  }
+  
   @Input() hostObject: any;
 
   atdUUID: string;
@@ -23,7 +24,8 @@ export class ActivityFlowsComponent implements OnInit {
 
   constructor(
     private eventsService: EventsService,
-    public translate: TranslateService
+    public translate: TranslateService,
+    private dialogService: PepDialogService,
   ) {
   }
 
@@ -50,7 +52,7 @@ export class ActivityFlowsComponent implements OnInit {
     init: async (parameters: IPepGenericListParams) => {
       this.draft = await this.eventsService.getDraft(this.hostObject.objectList[0]);
 
-      return Promise.resolve({
+      return {
         dataView: {
           Context: {
             Name: '',
@@ -105,7 +107,7 @@ export class ActivityFlowsComponent implements OnInit {
           }
         }),
         totalCount: this.draft.Data.Events.length
-      });
+      };
     },
   }
 
@@ -128,5 +130,25 @@ export class ActivityFlowsComponent implements OnInit {
         }]
       } else return []
     }
+  }
+
+  createClicked($event: any) {
+    const events = this.eventsService.getTransactionEvents(this.atdUUID).then(events => {
+      const groupedEvents = groupBy(this.draft.Data.Events, (item) => item.EventKey);
+      const formData: CreateFormData = {
+          Events: events as unknown as UserEvent[],
+          CurrentEvents: groupedEvents,
+      }
+      const dialogConfig = this.dialogService.getDialogConfig({}, 'regular');
+      dialogConfig.data = {
+          content: AddFormComponent
+      }
+  
+      this.dialogService.openDialog(AddFormComponent, formData, dialogConfig).afterClosed().subscribe((createdEvent: ATDEventForDraft) => {
+          if (createdEvent) {
+            this.draft.Data.Events.push(createdEvent);
+          }
+      })
+    });
   }
 }
