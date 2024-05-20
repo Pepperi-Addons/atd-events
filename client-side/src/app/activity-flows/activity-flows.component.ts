@@ -33,21 +33,6 @@ export class ActivityFlowsComponent implements OnInit {
     this.atdUUID = this.hostObject.objectList[0];
   }
 
-  generateEventName(eventKey: EventType, fieldID?: string): string {
-    switch (eventKey) {
-      case "OnTransactionLoaded":
-        return this.translate.instant("OnTransactionLoaded_EventName");
-      case "OnTransactionLoad":
-        return this.translate.instant("OnTransactionLoad_EventName");
-      case "OnTransactionFieldChanged":
-        return this.translate.instant("OnTransactionFieldChanged_EventName", { fieldID: fieldID });
-      case "OnTransactionLineFieldChanged":
-        return this.translate.instant("OnTransactionLineFieldChanged_EventName", { fieldID: fieldID });
-      default:
-        return this.translate.instant("Unknown_EventName");
-    }
-  }
-
   listDataSource: IPepGenericListDataSource = {
     init: async (parameters: IPepGenericListParams) => {
       this.draft = await this.eventsService.getDraft(this.hostObject.objectList[0]);
@@ -100,7 +85,7 @@ export class ActivityFlowsComponent implements OnInit {
           MinimumColumnWidth: 0
         },
         items: this.draft.Data.Events.map(event => {
-          const eventName = this.generateEventName(event.EventKey, event.FieldID);
+          const eventName = this.translate.instant(`${event.EventKey}_EventName`)
           return {
             ...event,
             EventName: eventName
