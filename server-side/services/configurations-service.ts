@@ -60,10 +60,12 @@ export class ConfigurationsService {
     }
 
     async addFlowNameToATDEvents(atdEvents: ATDEventForDraft[]): Promise<ATDEventForUI[]> {
-        const flowKeys = atdEvents.map(event => event.Flow.FlowKey);
+        const flowKeys: Set<string> = new Set<string>();
+        atdEvents.forEach(event => flowKeys.add(event.Flow.FlowKey));
+        const flowKeysArr = Array.from(flowKeys.keys())
         try {
             // get the flows
-            const flows = (await this.papiClient.userDefinedFlows.search({ KeyList: flowKeys })).Objects;
+            const flows = (await this.papiClient.userDefinedFlows.search({ KeyList: flowKeysArr })).Objects;
             
             // create a map from flow key to flow name
             const flowsKeysToNames = {};
@@ -119,7 +121,6 @@ export class ConfigurationsService {
             throw ex;
         }
     }
-
 
     async getATDEvents(atdUUID: string): Promise<ATDEventForUI[]> {
         try {

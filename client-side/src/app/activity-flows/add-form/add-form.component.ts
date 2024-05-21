@@ -1,11 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewContainerRef } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
 
-import { EventsNames, SelectOptions } from 'shared';
-import { CreateFormData } from '../../entities'
+import { EventsNames, FlowObject, SelectOptions } from 'shared';
+import { CreateFormData, UserEvent } from '../../entities'
 import { EventsService } from '../../services/events.service';
+import { PepAddonBlockLoaderService } from '@pepperi-addons/ngx-lib/remote-loader';
 
 @Component({
   selector: 'block-add-form',
@@ -17,16 +18,19 @@ export class AddFormComponent implements OnInit {
   possibleEvents: SelectOptions<string> = [];
   possibleFields: SelectOptions<string> = [];
   eventSupportsField: boolean = true;
+  chosenEvent: UserEvent;
   eventKey: string = '';
   eventTitle: string = '';
   eventField: string = '';
   isValid: boolean = false;
+  chosenFlow: FlowObject;
+  chooseFlowTitle: string = ''
 
   constructor(
     private dialogRef: MatDialogRef<AddFormComponent>,
     private translate: TranslateService,
     private eventsService: EventsService,
-    private dialogService: PepDialogService,
+    private addonLoaderService: PepAddonBlockLoaderService,
     @Inject(MAT_DIALOG_DATA) public incoming: CreateFormData
   ) {
 
@@ -34,26 +38,58 @@ export class AddFormComponent implements OnInit {
       this.possibleEvents = incoming.Events.filter(event => incoming.CurrentEvents.get(event.EventKey) === undefined || event.Fields?.length > 0).map(event => {
         return {
           key: event.EventKey,
-          value: event.EventKey
+          value: this.translate.instant(`${event.EventKey}_EventName`)
         }
       });
     }
+    this.chooseFlowTitle = translate.instant('AddDialog_FlowPicker')
   }
 
   ngOnInit(): void {
   }
 
+  chooseFlow() {
+    const dialogRef = this.addonLoaderService.loadAddonBlockInDialog({
+        container: this.incoming.ViewContainer,
+        name: 'FlowPicker',
+        hostObject: {
+            fields: this.chosenEvent ? this.chosenEvent.EventData : undefined,
+            runFlowData: this.chosenFlow
+        },
+        hostEventsCallback: (event) => {
+          console.log('inside callback', event)
+            if(event.data && event.data.FlowKey != '') {
+              this.chosenFlow = event.data;
+              this.isValid = this.isFormValid();
+              this.chooseFlowTitle = this.chosenFlow?.FlowKey;
+              this.eventsService.searchFlows(this.chosenFlow.FlowKey).then(flows => {
+                if (flows?.Objects?.length > 0) {
+                  this.chooseFlowTitle = flows.Objects[0].Name || this.chosenFlow.FlowKey;
+                }
+              })
+            }
+            else {
+              this.chosenFlow = undefined;
+              this.isValid = false;
+              this.chooseFlowTitle = this.translate.instant('AddDialog_FlowPicker')
+            }
+            dialogRef.close();
+        },
+        size: 'large'
+    })
+  }
+
   eventKeyChanged(value) {
-    const event = this.incoming.Events.find(event => event.EventKey === value);
-    if (event) {
-        this.eventSupportsField = event.Fields?.length > 0 || false;
-        this.isValid = !this.eventSupportsField;
-        this.eventTitle = event.Title;
+    this.chosenEvent = this.incoming.Events.find(event => event.EventKey === value);
+    if (this.chosenEvent) {
+        this.eventSupportsField = this.chosenEvent.Fields?.length > 0 || false;
+        this.isValid = this.isFormValid();
+        this.eventTitle = this.chosenEvent.Title;
         // if the event support field, we need to filter out the fields already defined for this event
-        if (event.Fields?.length > 0) {
+        if (this.chosenEvent.Fields?.length > 0) {
           this.eventField = '';
-          this.possibleFields = event.Fields.filter(field => {
-            const events = this.incoming.CurrentEvents.get(event.EventKey);
+          this.possibleFields = this.chosenEvent.Fields.filter(field => {
+            const events = this.incoming.CurrentEvents.get(this.chosenEvent.EventKey);
             if (events) {
               if (events.find(item => item.FieldID === field.ApiName)) {
                 return false;
@@ -77,29 +113,23 @@ export class AddFormComponent implements OnInit {
   }
 
   createEvent() {
-    const chosenEvent = this.incoming.Events.find(item => item.EventKey === this.eventKey);
-    this.eventsService.upsertEvent({
-      EventKey: this.eventKey as EventsNames,
+    this.dialogRef.close({
+      EventKey: this.chosenEvent.EventKey as EventsNames,
       FieldID: this.eventSupportsField ? this.eventField : '',
-      Flow: undefined
-    }).then((event => {
-      this.dialogRef.close(event);
-    })).catch(error => {
-      console.log(`event creation failed with the following error: ${JSON.stringify(error)}`);
-      const dialogTitle = this.translate.instant('AddDialog_Failure_Title');
-      const dialogContent = this.translate.instant('AddDialog_Failure_Content');
-      const dialogConfig = this.dialogService.getDialogConfig({}, 'regular');
-      const dialogData: PepDialogData = {
-        actionsType: 'close',
-        content: dialogContent,
-        title: dialogTitle,
-        actionButtons: [],
-        showClose: true,
-        showFooter: true,
-        showHeader: true
-      }
-      this.dialogService.openDefaultDialog(dialogData, dialogConfig);
+      Flow: this.chosenFlow
     })
+  }
+
+  isFormValid() {
+    // if event & flow has been chosen than the form is valid
+    let result = this.chosenEvent != undefined && this.chosenFlow != undefined;
+    
+    // if the event support fields, need to make sure we have chosen a field
+    if(this.eventSupportsField) {
+      result = result && this.eventField != ''
+    }
+
+    return result
   }
 
   close() {

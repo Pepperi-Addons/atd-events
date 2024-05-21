@@ -8,8 +8,8 @@
             [options]="possibleEvents"
             (valueChange)="eventKeyChanged($event)"
             [emptyOption]="false"
-            ></pep-select>
-            <pep-select
+        ></pep-select>
+        <pep-select
             [(value)]="eventField"
             [label]="'AddDialog_Field_Label' | translate"
             [mandatory]="true"
@@ -18,6 +18,12 @@
             (valueChange)="isValid=true"
             [emptyOption]="false"
         ></pep-select>
+        <pep-button 
+            [sizeType]="'md'" 
+            [value]="chooseFlowTitle" 
+            [styleType]="'regular'" 
+            (buttonClick)="chooseFlow()"
+        ></pep-button>
     </ng-container>
     <ng-container pep-dialog-actions>
         <div class="pep-spacing-element-negative" style="display: flex;">         

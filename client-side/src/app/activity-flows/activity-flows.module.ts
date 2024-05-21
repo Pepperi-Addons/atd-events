@@ -36,6 +36,7 @@ export const routes: Routes = [
         PepTopBarModule,
         PepDialogModule,
         PepSelectModule,
+        PepRemoteLoaderModule,
         TranslateModule.forChild({
             loader: {
                 provide: TranslateLoader,

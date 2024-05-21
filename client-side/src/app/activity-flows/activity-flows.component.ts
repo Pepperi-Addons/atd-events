@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewContainerRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IPepGenericListDataSource, IPepGenericListParams, IPepGenericListActions } from '@pepperi-addons/ngx-composite-lib/generic-list';
 import { PepSelectionData } from '@pepperi-addons/ngx-lib/list';
@@ -7,7 +7,7 @@ import { Draft } from '@pepperi-addons/papi-sdk';
 import { ATDEventForDraft, EventType, groupBy } from "shared";
 import { CreateFormData, UserEvent } from '../entities';
 import { AddFormComponent } from './add-form/add-form.component';
-import { PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
+import { PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
 
 @Component({
   selector: 'activity-flows',
@@ -26,74 +26,89 @@ export class ActivityFlowsComponent implements OnInit {
     private eventsService: EventsService,
     public translate: TranslateService,
     private dialogService: PepDialogService,
+    private viewContainer: ViewContainerRef,
   ) {
   }
 
   ngOnInit(): void {
     this.atdUUID = this.hostObject.objectList[0];
+    this.GetDataSource().then(dataSource => {
+      this.listDataSource = dataSource
+    })
   }
 
-  listDataSource: IPepGenericListDataSource = {
-    init: async (parameters: IPepGenericListParams) => {
-      this.draft = await this.eventsService.getDraft(this.hostObject.objectList[0]);
+  listDataSource: IPepGenericListDataSource;
+  
+  async GetDataSource(): Promise<IPepGenericListDataSource> {
+    this.draft = await this.eventsService.getDraft(this.hostObject.objectList[0]);
+    return {
+      init: async (parameters: IPepGenericListParams) => {
 
-      return {
-        dataView: {
-          Context: {
-            Name: '',
-            Profile: { InternalID: 0 },
-            ScreenSize: 'Landscape'
+        return {
+          dataView: {
+            Context: {
+              Name: '',
+              Profile: { InternalID: 0 },
+              ScreenSize: 'Landscape'
+            },
+            Type: 'Grid',
+            Title: 'Events Flows list',
+            Fields: [
+              {
+                FieldID: 'EventName',
+                Type: 'TextBox',
+                Title: await this.translate.get("ActivityList_DataView_EventTitle_Title").toPromise(),
+                Mandatory: true,
+                ReadOnly: true
+              },
+              {
+                FieldID: 'FieldID',
+                Type: 'TextBox',
+                Title: await this.translate.get("ActivityList_DataView_EventField_Title").toPromise(),
+                Mandatory: false,
+                ReadOnly: true
+              },
+              {
+                FieldID: 'FlowName',
+                Type: 'TextBox',
+                Title: await this.translate.get("ActivityList_DataView_FlowName_Title").toPromise(),
+                Mandatory: true,
+                ReadOnly: true
+              }
+
+            ],
+            Columns: [
+              {
+                Width: 10
+              },
+              {
+                Width: 10
+              },
+              {
+                Width: 10
+              }
+            ],
+            FrozenColumnsCount: 0,
+            MinimumColumnWidth: 0
           },
-          Type: 'Grid',
-          Title: 'Events Flows list',
-          Fields: [
-            {
-              FieldID: 'EventName',
-              Type: 'TextBox',
-              Title: await this.translate.get("ActivityList_DataView_EventTitle_Title").toPromise(),
-              Mandatory: true,
-              ReadOnly: true
-            },
-            {
-              FieldID: 'FieldID',
-              Type: 'TextBox',
-              Title: await this.translate.get("ActivityList_DataView_EventField_Title").toPromise(),
-              Mandatory: false,
-              ReadOnly: true
-            },
-            {
-              FieldID: 'FlowName',
-              Type: 'TextBox',
-              Title: await this.translate.get("ActivityList_DataView_FlowName_Title").toPromise(),
-              Mandatory: true,
-              ReadOnly: true
+          items: this.draft.Data.Events.map(event => {
+            const eventName = this.translate.instant(`${event.EventKey}_EventName`)
+            return {
+              ...event,
+              EventName: eventName
             }
-
-          ],
-          Columns: [
-            {
-              Width: 10
-            },
-            {
-              Width: 10
-            },
-            {
-              Width: 10
-            }
-          ],
-          FrozenColumnsCount: 0,
-          MinimumColumnWidth: 0
-        },
-        items: this.draft.Data.Events.map(event => {
-          const eventName = this.translate.instant(`${event.EventKey}_EventName`)
-          return {
-            ...event,
-            EventName: eventName
-          }
-        }),
-        totalCount: this.draft.Data.Events.length
-      };
-    },
+          }),
+          totalCount: this.draft.Data.Events.length,
+        };
+      },
+      inputs: {
+        emptyState: {
+          title: '',
+          description: '',
+          show: this.draft.Data.Events.length <= 0
+        }
+      }
+    }
   }
 
   actions: IPepGenericListActions = {
@@ -123,8 +138,10 @@ export class ActivityFlowsComponent implements OnInit {
       const formData: CreateFormData = {
           Events: events as unknown as UserEvent[],
           CurrentEvents: groupedEvents,
+          ViewContainer: this.viewContainer,
+          ObjectKey: this.atdUUID
       }
-      const dialogConfig = this.dialogService.getDialogConfig({}, 'regular');
+      const dialogConfig = this.dialogService.getDialogConfig({}, 'small');
       dialogConfig.data = {
           content: AddFormComponent
       }
@@ -132,6 +149,26 @@ export class ActivityFlowsComponent implements OnInit {
       this.dialogService.openDialog(AddFormComponent, formData, dialogConfig).afterClosed().subscribe((createdEvent: ATDEventForDraft) => {
           if (createdEvent) {
             this.draft.Data.Events.push(createdEvent);
+            this.eventsService.upsertEvent(this.draft).then(event => {
+              this.GetDataSource().then(dataSource => {
+                this.listDataSource = dataSource;
+              });
+            }).catch(error => {
+              console.log(`event creation failed with the following error: ${JSON.stringify(error)}`);
+              const dialogTitle = this.translate.instant('AddDialog_Failure_Title');
+              const dialogContent = this.translate.instant('AddDialog_Failure_Content');
+              const dialogConfig = this.dialogService.getDialogConfig({}, 'regular');
+              const dialogData: PepDialogData = {
+                actionsType: 'close',
+                content: dialogContent,
+                title: dialogTitle,
+                actionButtons: [],
+                showClose: true,
+                showFooter: true,
+                showHeader: true
+              }
+              this.dialogService.openDefaultDialog(dialogData, dialogConfig);
+            })
           }
       })
     });
