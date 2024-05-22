@@ -1,12 +1,15 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { ApplicationRef, Component, DoBootstrap, Injector, NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule, Routes } from '@angular/router';
+import { TranslateLoader, TranslateModule, TranslateStore } from '@ngx-translate/core';
+
+import { PepAddonService, PepNgxLibModule } from '@pepperi-addons/ngx-lib';
+
+import { config } from './addon.config';
 import { AppComponent } from './app.component';
 import { ActivityEventsComponent, ActivityEventsModule } from './activity-events';
-import { RouterModule, Routes } from '@angular/router';
-import { PepAddonService, PepNgxLibModule } from '@pepperi-addons/ngx-lib';
-import { config } from './addon.config';
-import { HttpClientModule } from '@angular/common/http';
-import { TranslateLoader, TranslateModule, TranslateStore } from '@ngx-translate/core';
 import { ActivityFlowsComponent, ActivityFlowsModule } from './activity-flows';
 
 @Component({
@@ -26,6 +29,7 @@ const routes: Routes = [
         PepNgxLibModule,
         ActivityEventsModule,
         ActivityFlowsModule,
+        BrowserAnimationsModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

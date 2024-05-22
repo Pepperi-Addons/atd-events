@@ -1,0 +1,6 @@
+.pageExplanation {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: var(--pep-spacing-lg, 1rem) 0 1.25rem 0;
+}

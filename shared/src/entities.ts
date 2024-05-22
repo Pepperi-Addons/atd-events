@@ -1,4 +1,4 @@
-import {  ConfigurationScheme } from "@pepperi-addons/papi-sdk";
+import {  AddonDataScheme, ConfigurationScheme } from "@pepperi-addons/papi-sdk";
 import { AddonUUID } from '../../addon.config.json';
 
 
@@ -20,3 +20,14 @@ export const atdFlowsConfigurationSchema: ConfigurationScheme = {
         Sync: true,
     }
 };
+
+export interface SelectOption<T> {
+    key: T;
+    value: string;
+}
+
+export type SelectOptions<T> = Array<SelectOption<T>>;
+
+export type EventDataFields = AddonDataScheme['Fields']
+
+

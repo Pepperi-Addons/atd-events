@@ -1,13 +1,14 @@
 import { Injectable } from "@angular/core";
-import { PepAddonService } from "@pepperi-addons/ngx-lib";
+import { PepAddonService, PepHttpService } from "@pepperi-addons/ngx-lib";
 import { config } from "../addon.config";
 import { Draft } from "@pepperi-addons/papi-sdk";
-import { ATDEventForUI } from "shared";
+import { ATDEventForUI, ATDEventForDraft } from "shared";
+import { lastValueFrom } from "rxjs";
 
 @Injectable()
 export class EventsService {
 
-    constructor(private addonService: PepAddonService) { }
+    constructor(private addonService: PepAddonService, private httpService: PepHttpService) { }
 
     getTransactionEvents(atdUUID: string): Promise<string[]> {
         return new Promise((resolve, reject) => {
@@ -24,5 +25,12 @@ export class EventsService {
     async getDraft(draftKey: string): Promise<Draft> {
         return await this.addonService.getAddonApiCall(config.AddonUUID, 'api', `draft?draft_key=${draftKey}`).toPromise();
     }
+    
+    async upsertEvent(eventObj: Draft) {
+        return await this.addonService.postAddonApiCall(config.AddonUUID, 'api', 'draft', eventObj).toPromise();
+    }
 
+    async searchFlows(flowKey: string): Promise<any> {
+        return lastValueFrom(await this.httpService.postPapiApiCall('/user_defined_flows/search', { KeyList: [flowKey], Fields: ['Key', 'Name']}));
+    }
 }
