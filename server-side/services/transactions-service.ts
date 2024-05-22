@@ -10,7 +10,7 @@ export class TransactionsService {
     
     constructor(private client: Client, private atdUUID) { }
 
-    private async initATD(uuid: string) {
+    private async initATDByUUID(uuid: string) {
         const types = await this.utilities.papiClient.types.find({
             where: `UUID='${uuid}'`
         });
@@ -22,23 +22,42 @@ export class TransactionsService {
         }
     }
 
+    private async initATDByInternalID(internalID: number) {
+        const types = await this.utilities.papiClient.types.find({
+            where: `InternalID=${internalID}`
+        }); // we cannot use metadata.type because it returns a different type of object (ATDMetaData) than the one we need (Type)
+        if(types && types.length > 0) {
+            this.atd = types[0];
+        }
+        else {
+            console.error(`could not find atd with InternalID: ${internalID}`)
+        }
+    }
+
     private async getInternalID(uuid: string): Promise<number> {
         if (!this.atd) {
-            await this.initATD(uuid);
+            await this.initATDByUUID(uuid);
         }
         return this.atd?.InternalID || -1;
+    }
+
+    async getUUID(internalID: number): Promise<string> {
+        if (!this.atd) {
+            await this.initATDByInternalID(internalID);
+        }
+        return this.atd?.UUID || '';
     }
     
     async getName(uuid: string): Promise<string> {
         if (!this.atd) {
-            await this.initATD(uuid);
+            await this.initATDByUUID(uuid);
         }
         return this.atd?.Name || '';
     }
 
     async getType(uuid: string): Promise<number> {
         if (!this.atd) {
-            await this.initATD(uuid);
+            await this.initATDByUUID(uuid);
         }
         return this.atd?.Type || 99; // if the atd could not be found, consider is as activity type
     }
