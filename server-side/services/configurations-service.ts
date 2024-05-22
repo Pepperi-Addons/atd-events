@@ -2,6 +2,7 @@ import { PapiClient, Draft } from '@pepperi-addons/papi-sdk'
 import { Client } from '@pepperi-addons/debug-server';
 import { AddonUUID } from '../../addon.config.json';
 import { ATDEventForDraft, ATDEventForUI, atdFlowsConfigurationSchemaName } from 'shared';
+import { TransactionsService } from './transactions-service';
 
 export class ConfigurationsService {
 
@@ -59,10 +60,12 @@ export class ConfigurationsService {
     }
 
     async addFlowNameToATDEvents(atdEvents: ATDEventForDraft[]): Promise<ATDEventForUI[]> {
-        const flowKeys = atdEvents.map(event => event.Flow.FlowKey);
+        const flowKeys: Set<string> = new Set<string>();
+        atdEvents.forEach(event => flowKeys.add(event.Flow.FlowKey));
+        const flowKeysArr = Array.from(flowKeys.keys())
         try {
             // get the flows
-            const flows = (await this.papiClient.userDefinedFlows.search({ KeyList: flowKeys })).Objects;
+            const flows = (await this.papiClient.userDefinedFlows.search({ KeyList: flowKeysArr })).Objects;
             
             // create a map from flow key to flow name
             const flowsKeysToNames = {};
@@ -99,11 +102,25 @@ export class ConfigurationsService {
             return draft;
         }
         catch (ex) {
+            if ((ex as Error).message.indexOf('Object ID does not exist') > 0) {
+                const transactionsService = new TransactionsService(this.client, draftKey);
+                const atdName = await transactionsService.getName(draftKey);
+                return {
+                    AddonUUID: AddonUUID,
+                    ConfigurationSchemaName: atdFlowsConfigurationSchemaName,
+                    Key: draftKey,
+                    Name: atdName,
+                    Description: `draft object for ATD ${atdName}`,
+                    Data: {
+                        Events: []
+                    },
+                    Profiles: []
+                }
+            }
             console.error(`Error in getDraft ${ex}`)
             throw ex;
         }
     }
-
 
     async getATDEvents(atdUUID: string): Promise<ATDEventForUI[]> {
         try {

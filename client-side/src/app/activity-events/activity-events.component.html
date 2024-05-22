@@ -1,10 +1,11 @@
 <pep-page-layout [addPadding]="true">
     <ng-container pep-main-area>
-        <div>
-            <pep-addon-block-loader *ngIf="loaded" [remoteEntry]="eventsBlockPath" name="UserDefinedEvents"
-                [hostObject]="hostObject">
-            </pep-addon-block-loader>
+        <div class="pageExplanation">
+            <span class="body-md">{{'Activity_Events_Deprecated_Message' | translate}}</span>
         </div>
+        <pep-addon-block-loader *ngIf="loaded" [remoteEntry]="eventsBlockPath" name="UserDefinedEvents"
+            [hostObject]="hostObject">
+        </pep-addon-block-loader>
     </ng-container>
 </pep-page-layout>
 

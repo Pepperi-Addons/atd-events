@@ -15,6 +15,9 @@ import { PepPageLayoutModule } from '@pepperi-addons/ngx-lib/page-layout';
 import { PepSizeDetectorModule } from '@pepperi-addons/ngx-lib/size-detector';
 import { PepButtonModule } from '@pepperi-addons/ngx-lib/button';
 import { PepTopBarModule } from '@pepperi-addons/ngx-lib/top-bar';
+import { AddFormComponent } from './add-form/add-form.component';
+import { PepDialogModule } from '@pepperi-addons/ngx-lib/dialog';
+import { PepSelectModule } from '@pepperi-addons/ngx-lib/select';
 export const routes: Routes = [
     {
         path: '',
@@ -22,7 +25,7 @@ export const routes: Routes = [
     }
 ];
 @NgModule({
-    declarations: [ActivityFlowsComponent],
+    declarations: [ActivityFlowsComponent, AddFormComponent],
     imports: [
         CommonModule,
         PepRemoteLoaderModule,
@@ -31,6 +34,9 @@ export const routes: Routes = [
         PepButtonModule,
         PepSizeDetectorModule,
         PepTopBarModule,
+        PepDialogModule,
+        PepSelectModule,
+        PepRemoteLoaderModule,
         TranslateModule.forChild({
             loader: {
                 provide: TranslateLoader,

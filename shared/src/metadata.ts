@@ -26,6 +26,7 @@ export interface FlowObject {
 export type FlowParamSource = 'Static' | 'Dynamic'
 
 export type EventsNames = typeof eventTypes[number];
+
 export interface ATDEventForDraft {
     EventKey: EventsNames,
     FieldID: string,
