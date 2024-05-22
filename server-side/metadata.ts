@@ -62,7 +62,24 @@ export const AtdRelations: Relation[] = [{
     AddonRelativeURL: filename,
     ElementsModule: 'WebComponents',
     ElementName: `atd-flows-element-${config.AddonUUID}`
-}]
+},
+{   // ATD Export relation
+    RelationName: "ATDExport",
+    AddonUUID: config.AddonUUID,
+    Name: "ATDExportRelation",
+    Description: "Used for exporting ATD flows draft object",
+    Type: "AddonAPI",
+    AddonRelativeURL: `/api/atd_export`,
+},
+{   // ATD Import relation
+    RelationName: "ATDImport",
+    AddonUUID: config.AddonUUID,
+    Name: "ATDImportRelation",
+    Description: "Used for importing ATD flows draft object",
+    Type: "AddonAPI",
+    AddonRelativeURL: `/api/atd_import`,
+},
+]
 
 export const TransactionScopeLoadEvent: UserEvent = {
     EventKey: 'OnTransactionLoad',
