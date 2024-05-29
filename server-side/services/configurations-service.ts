@@ -3,6 +3,7 @@ import { Client } from '@pepperi-addons/debug-server';
 import { AddonUUID } from '../../addon.config.json';
 import { ATDEventForDraft, ATDEventForUI, atdFlowsConfigurationSchemaName } from 'shared';
 import { TransactionsService } from './transactions-service';
+import { v4 as uuidv4 } from 'uuid';
 
 export class ConfigurationsService {
 
@@ -59,7 +60,7 @@ export class ConfigurationsService {
         }
     }
 
-    async addFlowNameToATDEvents(atdEvents: ATDEventForDraft[]): Promise<ATDEventForUI[]> {
+    async ATDEventDraftToUI(atdEvents: ATDEventForDraft[]): Promise<ATDEventForUI[]> {
         const flowKeys: Set<string> = new Set<string>();
         atdEvents.forEach(event => flowKeys.add(event.Flow.FlowKey));
         const flowKeysArr = Array.from(flowKeys.keys())
@@ -77,7 +78,8 @@ export class ConfigurationsService {
             const atdEventsForUI = atdEvents.map(event => {
                 return {
                     ...event,
-                    FlowName: flowsKeysToNames[event.Flow.FlowKey]
+                    FlowName: flowsKeysToNames[event.Flow.FlowKey],
+                    ListKey: uuidv4()
                 }
             });
 
@@ -97,7 +99,7 @@ export class ConfigurationsService {
             if (!atdEvents) {
                 throw new Error(`Events are missing for draft ${draftKey}.`);
             }
-            const atdEventsForUI = await this.addFlowNameToATDEvents(atdEvents);
+            const atdEventsForUI = await this.ATDEventDraftToUI(atdEvents);
             draft.Data.Events = atdEventsForUI;
             return draft;
         }
@@ -126,7 +128,7 @@ export class ConfigurationsService {
         try {
             const draft: Draft = await this.papiClient.addons.configurations.addonUUID(AddonUUID).scheme(atdFlowsConfigurationSchemaName).drafts.key(atdUUID).get();
             const atdEvents: ATDEventForDraft[] = draft.Data.Events as ATDEventForDraft[];
-            return await this.addFlowNameToATDEvents(atdEvents);
+            return await this.ATDEventDraftToUI(atdEvents);
         }
         catch (ex) {
             console.error(`Error in getATDEvents ${ex}`)
