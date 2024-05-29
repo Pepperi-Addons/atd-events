@@ -49,34 +49,24 @@ export class AddFormComponent implements OnInit {
   }
 
   chooseFlow() {
-    const dialogRef = this.addonLoaderService.loadAddonBlockInDialog({
-        container: this.incoming.ViewContainer,
-        name: 'FlowPicker',
-        hostObject: {
-            fields: this.chosenEvent ? this.chosenEvent.EventData : undefined,
-            runFlowData: this.chosenFlow
-        },
-        hostEventsCallback: (event) => {
-          console.log('inside callback', event)
-            if(event.data && event.data.FlowKey != '') {
-              this.chosenFlow = event.data;
-              this.isValid = this.isFormValid();
-              this.chooseFlowTitle = this.chosenFlow?.FlowKey;
-              this.eventsService.searchFlows(this.chosenFlow.FlowKey).then(flows => {
-                if (flows?.Objects?.length > 0) {
-                  this.chooseFlowTitle = flows.Objects[0].Name || this.chosenFlow.FlowKey;
-                }
-              })
-            }
-            else {
-              this.chosenFlow = undefined;
-              this.isValid = false;
-              this.chooseFlowTitle = this.translate.instant('AddDialog_FlowPicker')
-            }
-            dialogRef.close();
-        },
-        size: 'large'
-    })
+    this.eventsService.chooseFlow(this.incoming.ViewContainer, this.chosenEvent ? this.chosenEvent.EventData : undefined, this.chosenFlow, (event) => {
+      console.log('inside callback', event)
+      if (event.data && event.data.FlowKey != '') {
+        this.chosenFlow = event.data;
+        this.isValid = this.isFormValid();
+        this.chooseFlowTitle = this.chosenFlow?.FlowKey;
+        this.eventsService.searchFlows(this.chosenFlow.FlowKey).then(flows => {
+          if (flows?.Objects?.length > 0) {
+            this.chooseFlowTitle = flows.Objects[0].Name || this.chosenFlow.FlowKey;
+          }
+        })
+      }
+      else {
+        this.chosenFlow = undefined;
+        this.isValid = false;
+        this.chooseFlowTitle = this.translate.instant('AddDialog_FlowPicker')
+      }
+    });
   }
 
   eventKeyChanged(value) {

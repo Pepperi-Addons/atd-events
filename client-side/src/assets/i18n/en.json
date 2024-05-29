@@ -17,5 +17,8 @@
     "AddDialog_UpdateButton": "Update",
     "AddDialog_Failure_Title": "Creation failed",
     "AddDialog_Failure_Content": "Failed to create event. please try again later.",
-    "AddDialog_FlowPicker": "Choose flow"
+    "AddDialog_FlowPicker": "Choose flow",
+    "EditDialog_Failure_Title": "Update failed",
+    "EditDialog_Failure_Content": "Failed to update event. please try again later.",
+    "EditDialog_Failure_No_Flow_Chosen_Content": "Failed to update event. A flow must be chosen."
 }

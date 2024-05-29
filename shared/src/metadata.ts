@@ -35,4 +35,5 @@ export interface ATDEventForDraft {
 
 export interface ATDEventForUI extends ATDEventForDraft {
     FlowName: string,
+    ListKey: string
 }
