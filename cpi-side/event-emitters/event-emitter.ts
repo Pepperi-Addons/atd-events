@@ -36,7 +36,7 @@ export abstract class IEventEmitter {
 
     private async getDraft(transactionUUID: string) {
         try {
-            // assuming this returns the draft with the given transactionUUID as a key, and otherwise returns undefined
+            // TODO: assuming this returns the draft with the given transactionUUID as a key, and otherwise returns undefined
             return await pepperi.addons.configurations.uuid(transactionUUID).schema(atdFlowsConfigurationSchemaName).get();
         }
         catch (ex) {
