@@ -7,7 +7,7 @@ import { Draft } from '@pepperi-addons/papi-sdk';
 import { ATDEventForDraft, EventType, groupBy } from "shared";
 import { CreateFormData, UserEvent } from '../entities';
 import { AddFormComponent } from './add-form/add-form.component';
-import { PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
+import { PepDialogActionsType, PepDialogData, PepDialogService } from '@pepperi-addons/ngx-lib/dialog';
 
 @Component({
   selector: 'activity-flows',
@@ -43,10 +43,10 @@ export class ActivityFlowsComponent implements OnInit {
 
   listDataSource: IPepGenericListDataSource;
 
-  openFailureDialog(dialogTitle: string, dialogContent: string) {
+  openNonCustomDialog(dialogTitle: string, dialogContent: string, actionType: PepDialogActionsType = 'close', callback?: (event: any) => void) {
     const dialogConfig = this.dialogService.getDialogConfig({}, 'regular');
     const dialogData: PepDialogData = {
-      actionsType: 'close',
+      actionsType: actionType,
       content: dialogContent,
       title: dialogTitle,
       actionButtons: [],
@@ -54,7 +54,11 @@ export class ActivityFlowsComponent implements OnInit {
       showFooter: true,
       showHeader: true
     }
-    this.dialogService.openDefaultDialog(dialogData, dialogConfig);
+    this.dialogService.openDefaultDialog(dialogData, dialogConfig).afterClosed().subscribe((event) => {
+      if (callback) {
+        callback(event);
+      }
+    });
   }
 
   async GetDataSource(): Promise<IPepGenericListDataSource> {
@@ -154,14 +158,14 @@ export class ActivityFlowsComponent implements OnInit {
                   console.log(`event editing failed with the following error: ${JSON.stringify(error)}`);
                   const dialogTitle = this.translate.instant('EditDialog_Failure_Title');
                   const dialogContent = this.translate.instant('EditDialog_Failure_Content');
-                  this.openFailureDialog(dialogTitle, dialogContent);
+                  this.openNonCustomDialog(dialogTitle, dialogContent);
                 })
               }
               else {
                 console.error(`A flow was not chosen for the event ${chosenUIEvent.EventKey}`);
                 const dialogTitle = this.translate.instant('EditDialog_Failure_Title');
                 const dialogContent = this.translate.instant('EditDialog_Failure_No_Flow_Chosen_Content');
-                this.openFailureDialog(dialogTitle, dialogContent);
+                this.openNonCustomDialog(dialogTitle, dialogContent);
               }
             });
           }
@@ -169,12 +173,34 @@ export class ActivityFlowsComponent implements OnInit {
         {
           title: this.translate.instant("Delete"),
           handler: async (objs) => {
-            // when this is implemented - need to delete the selected event
-            // reminder - the selected event is in objs.rows[0]
+            const listKey = objs.rows[0]
+            const dialogTitle = this.translate.instant('DeleteDialog_Title');
+            const dialogContent = this.translate.instant('DeleteDialog_Content');
+            this.openNonCustomDialog(dialogTitle, dialogContent, 'cancel-delete', (event) => {
+              //even is boolean, true if delete is confirmed, false if canceled
+              if (event) {
+                this.deleteEvent(listKey);
+              }
+            });
           }
         }]
       } else return []
     }
+  }
+
+  deleteEvent(listKey: string) {
+    const updatedEvents = this.draft.Data.Events.filter(event => event.ListKey !== listKey);
+    this.draft.Data.Events = updatedEvents;
+    this.eventsService.upsertEvent(this.draft).then(event => {
+      this.GetDataSource().then(dataSource => {
+        this.listDataSource = dataSource;
+      });
+    }).catch(error => {
+      console.log(`event deletion failed with the following error: ${JSON.stringify(error)}`);
+      const dialogTitle = this.translate.instant('DeleteDialog_Failure_Title');
+      const dialogContent = this.translate.instant('DeleteDialog_Failure_Content');
+      this.openNonCustomDialog(dialogTitle, dialogContent);
+    })
   }
 
   createClicked($event: any) {
@@ -201,7 +227,7 @@ export class ActivityFlowsComponent implements OnInit {
           console.log(`event creation failed with the following error: ${JSON.stringify(error)}`);
           const dialogTitle = this.translate.instant('AddDialog_Failure_Title');
           const dialogContent = this.translate.instant('AddDialog_Failure_Content');
-          this.openFailureDialog(dialogTitle, dialogContent);
+          this.openNonCustomDialog(dialogTitle, dialogContent);
         })
       }
     })

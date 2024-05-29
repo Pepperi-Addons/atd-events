@@ -20,5 +20,9 @@
     "AddDialog_FlowPicker": "Choose flow",
     "EditDialog_Failure_Title": "Update failed",
     "EditDialog_Failure_Content": "Failed to update event. please try again later.",
-    "EditDialog_Failure_No_Flow_Chosen_Content": "Failed to update event. A flow must be chosen."
+    "EditDialog_Failure_No_Flow_Chosen_Content": "Failed to update event. A flow must be chosen.",
+    "DeleteDialog_Title": "Delete event",
+    "DeleteDialog_Content": "Are you sure you want to delete this event?",
+    "DeleteDialog_Failure_Title": "Deletion failed",
+    "DeleteDialog_Failure_Content": "Failed to delete event. please try again later."
 }
