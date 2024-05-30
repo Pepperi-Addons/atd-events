@@ -3,7 +3,7 @@ import { EventEmitterFactory } from '../event-emitters/event-emitter-factory';
 import { InterceptorData } from '../metadata';
 
 export class SubscriptionService {
-    constructor() {}
+    constructor() { }
 
     async registerEvents() {
         pepperi.events.intercept('PreLoadTransactionScope', {}, async (data, next, main) => { return await this.handleEvent(data, next, main, 'PreLoadTransactionScope') });
