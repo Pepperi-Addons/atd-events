@@ -10,7 +10,7 @@ export abstract class IEventEmitter {
         const eventData = await this.getEventData(this.params.Data.DataObject);
         const eventKey = this.getEventKey();
         const draftKey = this.params.Data.DataObject.typeDefinition.uuid;
-        // check if there's a draft associated with the TransactionUUID
+        // check if there's a draft associated with the ATDUUID
         const eventFromDraft = await this.getEventFromDraftIfExists(draftKey, eventKey, eventData.FieldID);
         if (!eventFromDraft) {
             // if there's no draft or the event is not defined in the draft, this is an old event and needs to be emitted
@@ -37,22 +37,22 @@ export abstract class IEventEmitter {
         })
     }
 
-    private async getDraft(transactionUUID: string) {
+    private async getDraft(ATDUUID: string) {
         try {
-            return await pepperi.addons.configurations.get(transactionUUID);
+            return await pepperi.addons.configurations.get(ATDUUID);
         }
         catch (ex) {
             if ((ex as Error).message.includes('Could not find object with key')) {
                 return undefined;
             }
-            console.error(`Error getting draft for transactionUUID: ${transactionUUID}`);
+            console.error(`Error getting draft for ATDUUID: ${ATDUUID}`);
             throw ex;
         }
     }
 
-    private async getEventFromDraftIfExists(transactionUUID: string, eventKey: EventsNames, fieldID?: string) {
+    private async getEventFromDraftIfExists(ATDUUID: string, eventKey: EventsNames, fieldID?: string) {
         try {
-            const draft = await this.getDraft(transactionUUID);
+            const draft = await this.getDraft(ATDUUID);
             if (!draft) {
                 return undefined;
             }
@@ -64,7 +64,7 @@ export abstract class IEventEmitter {
             return event;
         }
         catch (ex) {
-            console.error(`Error getting event from draft for transactionUUID: ${transactionUUID}`);
+            console.error(`Error getting event from draft for ATDUUID: ${ATDUUID}`);
             throw ex;
         }
     }
