@@ -83,7 +83,7 @@ export const AtdRelations: Relation[] = [{
 
 export const TransactionScopeLoadEvent: UserEvent = {
     EventKey: 'OnTransactionLoad',
-    Title: 'transaction loading',
+    Title: 'Transaction Loading',
     EventData: {
         TransactionUUID: {
             Type: 'String',
@@ -94,7 +94,7 @@ export const TransactionScopeLoadEvent: UserEvent = {
 
 export const TransactionScopeLoadedEvent: UserEvent = {
     EventKey: 'OnTransactionLoaded',
-    Title: 'transaction loaded',
+    Title: 'Transaction Loaded',
     EventData: {
         TransactionUUID: {
             Type: 'String',
@@ -104,7 +104,7 @@ export const TransactionScopeLoadedEvent: UserEvent = {
 }
 export const OnTransactionFieldChangedEvent: UserEvent = {
     EventKey: 'OnTransactionFieldChanged',
-    Title: 'transaction field changed',
+    Title: 'Transaction Field Changed',
     EventData: {
         TransactionUUID: {
             Type: 'String',
@@ -124,7 +124,7 @@ export const OnTransactionFieldChangedEvent: UserEvent = {
 
 export const OnTransactionLineFieldChangedEvent: UserEvent = {
     EventKey: 'OnTransactionLineFieldChanged',
-    Title: 'transaction line field changed',
+    Title: 'Transaction Line Field Changed',
     EventData: {
         TransactionUUID: {
             Type: 'String',
