@@ -21,6 +21,7 @@ export class ActivityFlowsComponent implements OnInit {
 
   atdUUID: string;
   draft: Draft;
+  uiData: { Draft: Draft, PossibleEvents: UserEvent[] };
   events: UserEvent[];
 
   constructor(
@@ -35,9 +36,6 @@ export class ActivityFlowsComponent implements OnInit {
     this.atdUUID = this.hostObject.objectList[0];
     this.GetDataSource().then(dataSource => {
       this.listDataSource = dataSource
-    })
-    this.eventsService.getTransactionEvents(this.atdUUID).then(events => {
-      this.events = events as unknown as UserEvent[]
     });
   }
 
@@ -62,7 +60,9 @@ export class ActivityFlowsComponent implements OnInit {
   }
 
   async GetDataSource(): Promise<IPepGenericListDataSource> {
-    this.draft = await this.eventsService.getDraft(this.hostObject.objectList[0]);
+    this.uiData = await this.eventsService.getUIData(this.atdUUID);
+    this.draft = this.uiData.Draft;
+    this.events = this.uiData.PossibleEvents;
     return {
       init: async (parameters: IPepGenericListParams) => {
 

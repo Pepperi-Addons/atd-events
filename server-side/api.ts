@@ -41,6 +41,26 @@ export async function draft(client: Client, request: Request) {
     }
 }
 
+export async function get_ui_data(client: Client, request: Request) {
+    // this combines the get_transactions_events and draft GET functions
+    switch (request.method) {
+        case 'GET': {
+            const configurationsService: ConfigurationsService = new ConfigurationsService(client);
+            const atdUUID = request.query.atd_uuid;
+            if (!atdUUID) {
+                throw new Error('atd_uuid is a required query parameter for this endpoint.');
+            }
+            const draft = await configurationsService.getDraft(atdUUID);
+            const service: EventsService = new EventsService(client, atdUUID);
+            const events = await service.getTransactionEvents();
+            return { Draft: draft, PossibleEvents: events };
+        }
+        default: {
+            throw new Error(`${request.method} not supported`);
+        }
+    }
+}
+
 export async function get_events(client: Client, request: Request) {
     switch (request.method) {
         case 'GET': {
