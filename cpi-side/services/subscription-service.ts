@@ -10,11 +10,10 @@ export class SubscriptionService {
 
     async registerEvents() {
         pepperi.events.intercept('PreLoadTransactionScope', {}, async (data, next, main) => { return await this.handleEvent(data, next, main, 'PreLoadTransactionScope') });
-        pepperi.events.intercept('OnLoadTransactionScope', {}, async (data, next, main) => {return await this.handleEvent(data, next, main, 'OnLoadTransactionScope')});
+        pepperi.events.intercept('OnLoadTransactionScope', {}, async (data, next, main) => { return await this.handleEvent(data, next, main, 'OnLoadTransactionScope') });
         pepperi.events.intercept('IncrementFieldValue', {}, async (data, next, main) => { return await this.handleEvent(data, next, main, 'IncrementFieldValue') });
         pepperi.events.intercept('DecrementFieldValue', {}, async (data, next, main) => { return await this.handleEvent(data, next, main, 'DecrementFieldValue') });
         pepperi.events.intercept('SetFieldValue', {}, async (data, next, main) => { return await this.handleEvent(data, next, main, 'SetFieldValue') });
-        // pepperi.events.intercept('WFActionOded', {}, async (data, next, main) => { return await this.handleEvent(data, next, main, 'WFActionOded') });
 
         // now we need to register to any workflow action events
         const drafts = await pepperi.addons.configurations.uuid(AddonUUID).schema(atdFlowsConfigurationSchemaName).get();
@@ -25,6 +24,9 @@ export class SubscriptionService {
                     events.forEach(event => {
                         if (event.EventKey.startsWith('WFAction')) {
                             pepperi.events.intercept(event.EventKey, {}, async (data, next, main) => {
+                                // these events do not arrive with the DataObject required, so we need to fetch it
+                                const obj = await pepperi.DataObject.Get("transactions", data.ObjectKey) ?? await pepperi.DataObject.Get("activities", data.ObjectKey);
+                                data.DataObject = obj as DataObject;
                                 return await this.handleEvent(data, next, main, event.EventKey)
                             });
                         }
