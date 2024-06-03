@@ -5,6 +5,7 @@ import { Draft, SchemeField } from "@pepperi-addons/papi-sdk";
 import { ATDEventForUI, FlowObject } from "shared";
 import { lastValueFrom } from "rxjs";
 import { PepAddonBlockLoaderService } from "@pepperi-addons/ngx-lib/remote-loader";
+import { UserEvent } from "../entities";
 
 @Injectable()
 export class EventsService {
@@ -24,8 +25,8 @@ export class EventsService {
         return await this.addonService.getAddonApiCall(config.AddonUUID, 'api', `get_events?draft_key=${draftKey}`).toPromise();
     }
 
-    async getDraft(draftKey: string): Promise<Draft> {
-        return await this.addonService.getAddonApiCall(config.AddonUUID, 'api', `draft?draft_key=${draftKey}`).toPromise();
+    async getUIData(atdUUID: string): Promise<{ Draft: Draft, PossibleEvents: UserEvent[] }> {
+        return await this.addonService.getAddonApiCall(config.AddonUUID, 'api', `get_ui_data?atd_uuid=${atdUUID}`).toPromise();
     }
     
     async upsertEvent(eventObj: Draft) {
