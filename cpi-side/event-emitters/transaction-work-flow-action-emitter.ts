@@ -1,7 +1,7 @@
 import { EventsNames } from "shared";
 import { InterceptorData } from "../metadata";
 import { IEventEmitter } from "./event-emitter";
-import { DataObject } from "@pepperi-addons/cpi-node/build/cpi-side/app/entities";
+import { DataObject } from "@pepperi-addons/cpi-node";
 
 export class TransactionWorkFlowActionEmitter extends IEventEmitter {
     eventKey: string;

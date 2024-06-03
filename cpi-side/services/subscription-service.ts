@@ -3,7 +3,7 @@ import { EventEmitterFactory } from '../event-emitters/event-emitter-factory';
 import { InterceptorData } from '../metadata';
 import { AddonUUID } from '../../addon.config.json'
 import { atdFlowsConfigurationSchemaName } from 'shared';
-import { DataObject } from '@pepperi-addons/cpi-node/build/cpi-side/app/entities';
+import { DataObject } from '@pepperi-addons/cpi-node';
 
 export class SubscriptionService {
     constructor() { }
