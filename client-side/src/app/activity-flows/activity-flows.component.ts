@@ -114,10 +114,14 @@ export class ActivityFlowsComponent implements OnInit {
             MinimumColumnWidth: 0
           },
           items: this.draft.Data.Events.map(event => {
-            const eventName = this.translate.instant(`${event.EventKey}_EventName`)
+            // to find the event name, we need to find the event object with the same EventKey in the events array
+            const eventName = this.events.find(possibleEvent => possibleEvent.EventKey === event.EventKey)?.Title;
+            if (!eventName) {
+              console.warn(`Event with key ${event.EventKey} was not found in the possible events array`);
+            }
             return {
               ...event,
-              EventName: eventName
+              EventName: eventName ?? event.EventKey,
             }
           }),
           totalCount: this.draft.Data.Events.length,

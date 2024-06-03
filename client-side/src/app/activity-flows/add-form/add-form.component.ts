@@ -38,7 +38,7 @@ export class AddFormComponent implements OnInit {
       this.possibleEvents = incoming.Events.filter(event => incoming.CurrentEvents.get(event.EventKey) === undefined || event.Fields?.length > 0).map(event => {
         return {
           key: event.EventKey,
-          value: this.translate.instant(`${event.EventKey}_EventName`)
+          value: event.Title
         }
       });
     }
@@ -72,30 +72,30 @@ export class AddFormComponent implements OnInit {
   eventKeyChanged(value) {
     this.chosenEvent = this.incoming.Events.find(event => event.EventKey === value);
     if (this.chosenEvent) {
-        this.eventSupportsField = this.chosenEvent.Fields?.length > 0 || false;
-        this.isValid = this.isFormValid();
-        this.eventTitle = this.chosenEvent.Title;
-        // if the event support field, we need to filter out the fields already defined for this event
-        if (this.chosenEvent.Fields?.length > 0) {
-          this.eventField = '';
-          this.possibleFields = this.chosenEvent.Fields.filter(field => {
-            const events = this.incoming.CurrentEvents.get(this.chosenEvent.EventKey);
-            if (events) {
-              if (events.find(item => item.FieldID === field.ApiName)) {
-                return false;
-              }
-              else {
-                return true;
-              }
+      this.eventSupportsField = this.chosenEvent.Fields?.length > 0 || false;
+      this.isValid = this.isFormValid();
+      this.eventTitle = this.chosenEvent.Title;
+      // if the event support field, we need to filter out the fields already defined for this event
+      if (this.chosenEvent.Fields?.length > 0) {
+        this.eventField = '';
+        this.possibleFields = this.chosenEvent.Fields.filter(field => {
+          const events = this.incoming.CurrentEvents.get(this.chosenEvent.EventKey);
+          if (events) {
+            if (events.find(item => item.FieldID === field.ApiName)) {
+              return false;
             }
-            return true;
-          }).map(field => {
-            return {
-              key: field.ApiName,
-              value: field.Title
+            else {
+              return true;
             }
-          })
-        }
+          }
+          return true;
+        }).map(field => {
+          return {
+            key: field.ApiName,
+            value: field.Title
+          }
+        })
+      }
     }
     else {
       console.error(`could not find event ${value}`);
@@ -113,9 +113,9 @@ export class AddFormComponent implements OnInit {
   isFormValid() {
     // if event & flow has been chosen than the form is valid
     let result = this.chosenEvent != undefined && this.chosenFlow != undefined;
-    
+
     // if the event support fields, need to make sure we have chosen a field
-    if(this.eventSupportsField) {
+    if (this.eventSupportsField) {
       result = result && this.eventField != ''
     }
 

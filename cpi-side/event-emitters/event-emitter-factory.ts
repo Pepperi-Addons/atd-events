@@ -7,6 +7,7 @@ import { TransactionFieldChangeEventEmitter } from "./transaction-field-change-e
 import { TransactionLineFieldChangeEventEmitter } from "./transaction-line-field-change-emitter";
 import { TransactionScopeLoadEventEmitter } from "./transaction-scope-load-emitter";
 import { TransactionScopeLoadedEventEmitter } from './transaction-scope-loaded-emitter';
+import { TransactionWorkFlowActionEmitter } from './transaction-work-flow-action-emitter';
 
 export class EventEmitterFactory {
     static create(eventKey: string, params: InterceptorData): IEventEmitter | undefined {
@@ -21,8 +22,8 @@ export class EventEmitterFactory {
                 res = new TransactionScopeLoadedEventEmitter(params);
                 break;
             }
-            case 'SetFieldValue': 
-            case 'IncrementFieldValue': 
+            case 'SetFieldValue':
+            case 'IncrementFieldValue':
             case 'DecrementFieldValue': {
                 if (dataObject.resource === 'transactions') {
                     res = new TransactionFieldChangeEventEmitter(params);
@@ -33,7 +34,12 @@ export class EventEmitterFactory {
                 break;
             }
             default: {
-                throw new Error(`event ${eventKey} is not supported`);
+                if (eventKey.startsWith('WFAction')) {
+                    res = new TransactionWorkFlowActionEmitter(params, eventKey);
+                }
+                else {
+                    throw new Error(`event ${eventKey} is not supported`);
+                }
             }
         }
 
