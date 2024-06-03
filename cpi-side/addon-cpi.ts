@@ -31,7 +31,6 @@ router.post('/after_sync_registration', async (req, res, next) => {
 async function shouldReload(req) {
     const lastSyncTime = req.body.JobInfoResponse.ClientInfo.
     FormattedLastSyncDateTime;
-    debugger;
     const drafts = await pepperi.addons.configurations.uuid(AddonUUID).schema(atdFlowsConfigurationSchemaName).get();
     const modified = drafts.filter(draft => {
         return draft.ModificationDateTime! > lastSyncTime
