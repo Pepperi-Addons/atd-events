@@ -3,6 +3,7 @@ import { EventEmitterFactory } from '../event-emitters/event-emitter-factory';
 import { InterceptorData } from '../metadata';
 import { AddonUUID } from '../../addon.config.json'
 import { atdFlowsConfigurationSchemaName } from 'shared';
+import { DataObject } from '@pepperi-addons/cpi-node/build/cpi-side/app/entities';
 
 export class SubscriptionService {
     constructor() { }
@@ -13,26 +14,24 @@ export class SubscriptionService {
         pepperi.events.intercept('IncrementFieldValue', {}, async (data, next, main) => { return await this.handleEvent(data, next, main, 'IncrementFieldValue') });
         pepperi.events.intercept('DecrementFieldValue', {}, async (data, next, main) => { return await this.handleEvent(data, next, main, 'DecrementFieldValue') });
         pepperi.events.intercept('SetFieldValue', {}, async (data, next, main) => { return await this.handleEvent(data, next, main, 'SetFieldValue') });
-        pepperi.events.intercept('WFActionOded', {}, async (data, next, main) => { return await this.handleEvent(data, next, main, 'WFActionOded') });
+        // pepperi.events.intercept('WFActionOded', {}, async (data, next, main) => { return await this.handleEvent(data, next, main, 'WFActionOded') });
 
         // now we need to register to any workflow action events
-        // const drafts = await pepperi.addons.configurations.uuid(AddonUUID).schema(atdFlowsConfigurationSchemaName).get();
-        // if (drafts.length > 0) {
-        //     drafts.forEach(draft => {
-        //         const events = draft.Data.Events;
-        //         if (events) {
-        //             events.forEach(event => {
-        //                 if (event.EventKey.startsWith('WFAction')) {
-        //                     debugger;
-        //                     // pepperi.events.intercept(event.EventKey, {}, async (data, next, main) => {
-        //                     //     debugger;
-        //                     //     return await this.handleEvent(data, next, main, event.EventKey)
-        //                     // });
-        //                 }
-        //             });
-        //         }
-        //     });
-        // }
+        const drafts = await pepperi.addons.configurations.uuid(AddonUUID).schema(atdFlowsConfigurationSchemaName).get();
+        if (drafts.length > 0) {
+            drafts.forEach(draft => {
+                const events = draft.Data.Events;
+                if (events) {
+                    events.forEach(event => {
+                        if (event.EventKey.startsWith('WFAction')) {
+                            pepperi.events.intercept(event.EventKey, {}, async (data, next, main) => {
+                                return await this.handleEvent(data, next, main, event.EventKey)
+                            });
+                        }
+                    });
+                }
+            });
+        }
     }
 
     private async handleEvent(data, next, main, eventKey) {
@@ -41,7 +40,6 @@ export class SubscriptionService {
             NextFunction: next,
             MainFunction: main
         }
-        debugger;
         const emitter = EventEmitterFactory.create(eventKey, interceptorData);
         return emitter ? await emitter.handleEvent() : undefined;
     }

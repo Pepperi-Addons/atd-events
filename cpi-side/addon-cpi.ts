@@ -6,5 +6,5 @@ export const router = Router();
 export async function load(configuration: any) {
     const service = new SubscriptionService();
 
-    service.registerEvents();
+    await service.registerEvents();
 }
