@@ -15,7 +15,7 @@
             [mandatory]="true"
             [options]="possibleFields"
             [disabled]="!eventSupportsField"
-            (valueChange)="isValid=true"
+            (valueChange)="isValid=isFormValid()"
             [emptyOption]="false"
         ></pep-select>
         <pep-button 
