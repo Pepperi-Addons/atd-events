@@ -15,9 +15,11 @@ export class UtilitiesService {
         });
     }
 
-    async createRelations(relations) {
+    async createRelations(relations, backwardsSupport: boolean) {
         await Promise.all(relations.map(async (singleRelation) => {
-            return await this.papiClient.addons.data.relations.upsert(singleRelation);
+            if (backwardsSupport || !singleRelation._Deprecated) {
+                return await this.papiClient.addons.data.relations.upsert(singleRelation);
+            }
         }));
     }
       
