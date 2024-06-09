@@ -26,7 +26,7 @@ export async function upgrade(client: Client, request: Request): Promise<any> {
     if (request.body.FromVersion && semver.compare(request.body.FromVersion, '0.6.14') < 0) {
         const service = new UtilitiesService(client);
         await service.createConfigurationSchema(atdFlowsConfigurationSchema);
-        return await createObjects(client);
+        return await createObjects(client, true);
     }
     else {
         return { success: true, resultObject: {} }
@@ -39,10 +39,10 @@ export async function downgrade(client: Client, request: Request): Promise<any> 
 }
 
 
-async function createObjects(client: Client) {
+async function createObjects(client: Client, backwardsSupport = false) {
     try {
         const service = new UtilitiesService(client);
-        await service.createRelations(AtdRelations);
+        await service.createRelations(AtdRelations, backwardsSupport);
         await service.createConfigurationSchema(atdFlowsConfigurationSchema);
         return {
             success: true,

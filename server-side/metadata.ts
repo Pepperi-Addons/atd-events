@@ -21,7 +21,8 @@ export const AtdRelations: Relation[] = [{
     Type: "NgComponent",
     AddonRelativeURL: filename,
     ElementsModule: 'WebComponents',
-    ElementName: `atd-events-element-${config.AddonUUID}`
+    ElementName: `atd-events-element-${config.AddonUUID}`,
+    _Deprecated: true
 },
 {   //meta data for relation of type NgComponent
     RelationName: "ActivityTypeListTabs",
@@ -34,7 +35,8 @@ export const AtdRelations: Relation[] = [{
     Type: "NgComponent",
     AddonRelativeURL: filename,
     ElementsModule: 'WebComponents',
-    ElementName: `atd-events-element-${config.AddonUUID}`
+    ElementName: `atd-events-element-${config.AddonUUID}`,
+    _Deprecated: true
 },
 {
     //meta data for relation of type NgComponent
