@@ -1,6 +1,7 @@
 @use '@pepperi-addons/ngx-lib/src/core/style/abstracts/variables' as ngx-variables;
 
-.list-container {
+.flows-list-container {
     padding-top: ngx-variables.$spacing-lg;
     padding-inline: ngx-variables.$spacing-xs;
+    height: 92%;
 }
