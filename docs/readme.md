@@ -59,7 +59,7 @@ There are currently no tests for the ATD Flows addon.
 
 ## APIs
 There are no official APIs for the ATD Flows addon.
-For internal use, see the [Postman Collection](./addon.postman_collection.json)
+For internal use, see the [Postman Collection](./atd-flows.postman_collection.json)
 
 ---
 
