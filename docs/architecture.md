@@ -49,6 +49,8 @@ ATD Flows allows the integration of new flows into legacy workflows without chan
 
 2. Once the custom event XXX is emitted, you can configure a flow to run when this event is raised. In the ATD Events tab, select the event XXX from the available events list and assign a flow to it.
 
+Usage example: This logic is used by the Pricing Addon to trigger pricing recalculation once a transaction is submitted.
+
 #### Steps to Configure:
 
 1. Create a Custom Field:
@@ -65,5 +67,6 @@ ATD Flows allows the integration of new flows into legacy workflows without chan
 * Add an action and select AlertOnCondition. Note that it is configured to "Notify when value is: True", which will never happen.
 * Select the custom field EmitEventMyEvent and save the configuration.
 * Sync the changes to ensure they take effect.
+
 
 Now, when the workflow is run, the custom event MyEvent will be raised, and the flow you configured will run.

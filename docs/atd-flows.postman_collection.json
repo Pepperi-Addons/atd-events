@@ -1,9 +1,7 @@
 {
 	"info": {
-		"_postman_id": "7d1999e3-b920-4297-b26d-eeddf7ea8de0",
 		"name": "ATD-Flows",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "17214645"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -123,7 +121,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    // draft key.\n    // must be in uuid format.\n    // if missing key will be auto generated\n    \"Key\": \"c78bbd36-35e8-11ee-9f19-325096b39f47\",\n    \"ConfigurationSchemaName\": \"Person\",\n    \"AddonUUID\": \"{{addonUUID}}\",\n    \"Name\": \"Yossi\",\n    // the shared data among all profiles.\n    // profiles could override this data within the Profiles property.\n    \"Data\": {\n        \"Name\": \"Name\",\n        \"Age\": 120,\n        \"ID\": \"GeneralID\"\n    },\n    \"Description\": \"draft\", //description of draft\n    // data per profile.\n    // in case of match between specific profile field and data field, the profile field will override the value of the data field.\n    \"Profiles\": [\n        {\n            \"Key\": \"51c5c372-35e7-11ee-be56-0242ac120002\",\n            \"Data\": {\n                \"Name\": \"Rep\"\n            }\n        },\n        {\n            \"Key\": \"c9ef1358-35e7-11ee-a0ea-325096b39f47\",\n            \"Data\": {\n                \"Name\": \"Buyer\",\n                \"ID\": \"BuyerID\"\n            }\n        }\n    ]\n}",
+							"raw": "{\n    \"Data\": {\n        \"Events\": [\n            {\n                \"EventKey\": \"OnTransactionLoaded\",\n                \"ListKey\": \"X-X-X-X-X\",\n                \"FlowName\": \"flowName\",\n                \"FieldID\": \"\",\n                \"Flow\": {\n                    \"FlowKey\": \"X-X-X-X-X\",\n                    \"FlowParams\": {}\n                }\n            },\n            {\n                \"EventKey\": \"OnTransactionLineFieldChanged\",\n                \"ListKey\": \"X-X-X-X-X\",\n                \"FlowName\": \"flowName4\",\n                \"FieldID\": \"UnitsQuantity\",\n                \"Flow\": {\n                    \"FlowKey\": \"X-X-X-X-X\",\n                    \"FlowParams\": {}\n                }\n            },\n            {\n                \"EventKey\": \"WFActionName\",\n                \"ListKey\": \"X-X-X-X-X\",\n                \"FlowName\": \"flowName3\",\n                \"FieldID\": \"\",\n                \"Flow\": {\n                    \"FlowKey\": \"X-X-X-X-X\",\n                    \"FlowParams\": {}\n                }\n            },\n            {\n                \"EventKey\": \"OnTransactionFieldChanged\",\n                \"ListKey\": \"X-X-X-X-X\",\n                \"FlowName\": \"flowName2\",\n                \"FieldID\": \"ActivityTypeID\",\n                \"Flow\": {\n                    \"FlowKey\": \"X-X-X-X-X\",\n                    \"FlowParams\": {}\n                }\n            },\n            {\n                \"EventKey\": \"WFActionMyEvent\",\n                \"FieldID\": \"\",\n                \"Flow\": {\n                    \"FlowKey\": \"X-X-X-X-X\",\n                    \"FlowParams\": {\n                        \"PictureNAme\": {\n                            \"Value\": \"name1\",\n                            \"Source\": \"Static\"\n                        }\n                    }\n                },\n                \"FlowName\": \"flowName\",\n                \"ListKey\": \"X-X-X-X-X\"\n            }\n        ]\n    },\n    \"Profiles\": [],\n    \"Description\": \"SomeDescription\",\n    \"PublishedVersion\": \"X-X-X-X-X\",\n    \"Name\": \"SomeName\",\n    \"Key\": \"X-X-X-X-X\",\n    \"ConfigurationSchemaName\": \"ATDFlowsConfigurations\",\n    \"AddonUUID\": \"X-X-X-X-X\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

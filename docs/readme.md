@@ -23,7 +23,7 @@ After a PR is merged into a release branch a version will be published and the e
 ## Debugging
 
 ### Local Debugging for ATD-Flows Functions
-- Use the Postman localhost folder to debug atd-flows functions locally by simulating API requests.
+- Use the Postman collection with a localhost environment to debug atd-flows functions locally by simulating API requests.
 - Delete `outFiles` values in `launch.json`. This will allow you to debug the ts files directly and not the compiled js files.
 
 ### Online specific
