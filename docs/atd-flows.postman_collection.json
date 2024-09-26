@@ -1,0 +1,303 @@
+{
+	"info": {
+		"name": "ATD-Flows",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Versions",
+			"item": [
+				{
+					"name": "Upgrade",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"eval(pm.globals.get('poll-job-response'))"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{PAPI_BASE_URL}}/addons/installed_addons/{{ADDON_UUID}}/upgrade/0.0.1",
+							"host": [
+								"{{PAPI_BASE_URL}}"
+							],
+							"path": [
+								"addons",
+								"installed_addons",
+								"{{ADDON_UUID}}",
+								"upgrade",
+								"0.0.1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Installed Addon",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PAPI_BASE_URL}}/addons/installed_addons/{{ADDON_UUID}}",
+							"host": [
+								"{{PAPI_BASE_URL}}"
+							],
+							"path": [
+								"addons",
+								"installed_addons",
+								"{{ADDON_UUID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Internal",
+			"item": [
+				{
+					"name": "Get Transaction Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/api/get_transactions_events?type_uuid",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"get_transactions_events"
+							],
+							"query": [
+								{
+									"key": "type_uuid",
+									"value": null,
+									"description": "Transaction type UUID"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get UI Data",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/api/get_ui_data?atd_uuid",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"get_ui_data"
+							],
+							"query": [
+								{
+									"key": "atd_uuid",
+									"value": null,
+									"description": "UUID of the ATD"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Draft",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Data\": {\n        \"Events\": [\n            {\n                \"EventKey\": \"OnTransactionLoaded\",\n                \"ListKey\": \"X-X-X-X-X\",\n                \"FlowName\": \"flowName\",\n                \"FieldID\": \"\",\n                \"Flow\": {\n                    \"FlowKey\": \"X-X-X-X-X\",\n                    \"FlowParams\": {}\n                }\n            },\n            {\n                \"EventKey\": \"OnTransactionLineFieldChanged\",\n                \"ListKey\": \"X-X-X-X-X\",\n                \"FlowName\": \"flowName4\",\n                \"FieldID\": \"UnitsQuantity\",\n                \"Flow\": {\n                    \"FlowKey\": \"X-X-X-X-X\",\n                    \"FlowParams\": {}\n                }\n            },\n            {\n                \"EventKey\": \"WFActionName\",\n                \"ListKey\": \"X-X-X-X-X\",\n                \"FlowName\": \"flowName3\",\n                \"FieldID\": \"\",\n                \"Flow\": {\n                    \"FlowKey\": \"X-X-X-X-X\",\n                    \"FlowParams\": {}\n                }\n            },\n            {\n                \"EventKey\": \"OnTransactionFieldChanged\",\n                \"ListKey\": \"X-X-X-X-X\",\n                \"FlowName\": \"flowName2\",\n                \"FieldID\": \"ActivityTypeID\",\n                \"Flow\": {\n                    \"FlowKey\": \"X-X-X-X-X\",\n                    \"FlowParams\": {}\n                }\n            },\n            {\n                \"EventKey\": \"WFActionMyEvent\",\n                \"FieldID\": \"\",\n                \"Flow\": {\n                    \"FlowKey\": \"X-X-X-X-X\",\n                    \"FlowParams\": {\n                        \"PictureNAme\": {\n                            \"Value\": \"name1\",\n                            \"Source\": \"Static\"\n                        }\n                    }\n                },\n                \"FlowName\": \"flowName\",\n                \"ListKey\": \"X-X-X-X-X\"\n            }\n        ]\n    },\n    \"Profiles\": [],\n    \"Description\": \"SomeDescription\",\n    \"PublishedVersion\": \"X-X-X-X-X\",\n    \"Name\": \"SomeName\",\n    \"Key\": \"X-X-X-X-X\",\n    \"ConfigurationSchemaName\": \"ATDFlowsConfigurations\",\n    \"AddonUUID\": \"X-X-X-X-X\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE_URL}}/api/draft",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"draft"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Draft",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/api/draft?draft_key",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"draft"
+							],
+							"query": [
+								{
+									"key": "draft_key",
+									"value": null,
+									"description": "Draft Key"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/api/get_events?draft_key",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"get_events"
+							],
+							"query": [
+								{
+									"key": "draft_key",
+									"value": null,
+									"description": "Draft Key"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ATD Export",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/api/atd_export?internal_id=358863",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"atd_export"
+							],
+							"query": [
+								{
+									"key": "internal_id",
+									"value": "358863",
+									"description": "internal UUID of the atd"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ATD Import",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"InternalID\":\"\",\n    \"DataFromExport\": {\n        \"atdFlowsDraftObject\": {\n            \"ModificationDateTime\": \"2024-09-15T09:42:41.181Z\",\n            \"Data\": {\n                \"Events\": [\n                    {\n                        \"EventKey\": \"OnTransactionLoaded\",\n                        \"ListKey\": \"bbc7d5e3-b9bf-48ee-9a03-45f38138e8fa\",\n                        \"FlowName\": \"newscriptforhandover\",\n                        \"FieldID\": \"\",\n                        \"Flow\": {\n                            \"FlowKey\": \"04a02e35-d5ed-44b4-bb72-687c59c794a7\",\n                            \"FlowParams\": {}\n                        }\n                    },\n                    {\n                        \"EventKey\": \"OnTransactionLineFieldChanged\",\n                        \"ListKey\": \"3a4f78f4-2104-4abe-9ff1-4f22a5756ee8\",\n                        \"FlowName\": \"newscriptforhandover\",\n                        \"FieldID\": \"UnitsQuantity\",\n                        \"Flow\": {\n                            \"FlowKey\": \"04a02e35-d5ed-44b4-bb72-687c59c794a7\",\n                            \"FlowParams\": {}\n                        }\n                    },\n                    {\n                        \"EventKey\": \"WFActionOded\",\n                        \"ListKey\": \"e9e07064-33a4-4d94-896c-32514e2f574e\",\n                        \"FlowName\": \"newscriptforhandover\",\n                        \"FieldID\": \"\",\n                        \"Flow\": {\n                            \"FlowKey\": \"04a02e35-d5ed-44b4-bb72-687c59c794a7\",\n                            \"FlowParams\": {}\n                        }\n                    },\n                    {\n                        \"EventKey\": \"OnTransactionFieldChanged\",\n                        \"ListKey\": \"569472e5-706b-4df4-bbc8-14c19deb3d58\",\n                        \"FlowName\": \"rompipompi\",\n                        \"FieldID\": \"ActivityTypeID\",\n                        \"Flow\": {\n                            \"FlowKey\": \"559d0098-fb7d-4476-aff9-0f4d1d61bf76\",\n                            \"FlowParams\": {}\n                        }\n                    },\n                    {\n                        \"EventKey\": \"WFActionMyEvent\",\n                        \"FieldID\": \"\",\n                        \"Flow\": {\n                            \"FlowKey\": \"0c01f814-5c59-4905-84e2-bf7d7e41dbd2\",\n                            \"FlowParams\": {\n                                \"PictureNAme\": {\n                                    \"Value\": \"bomb\",\n                                    \"Source\": \"Static\"\n                                }\n                            }\n                        },\n                        \"FlowName\": \"flowsKD\",\n                        \"ListKey\": \"c0c8bc79-da2c-4e66-935d-1e3195b01ee0\"\n                    }\n                ]\n            },\n            \"CreationDateTime\": \"2024-06-26T14:06:09.855Z\",\n            \"Profiles\": [],\n            \"Description\": \"draft object for ATD test_for_export\",\n            \"PublishedVersion\": \"58214ab3-0b4f-42b7-82be-04cabeafb836\",\n            \"Hidden\": false,\n            \"Dirty\": false,\n            \"Name\": \"test_for_export\",\n            \"Key\": \"38404382-8cb2-4aa5-af57-ca1ab2c94703\",\n            \"ConfigurationSchemaName\": \"ATDFlowsConfigurations\",\n            \"AddonUUID\": \"316afc44-af38-4354-ac4c-22011cb0ea84\"\n        }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_BASE_URL}}/api/atd_import",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"atd_import"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{OAuth_Token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"eval(pm.globals.get('auth-script'))"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ADDON_UUID",
+			"value": "316afc44-af38-4354-ac4c-22011cb0ea84",
+			"type": "string"
+		},
+		{
+			"key": "LOCAL_HOST_URL",
+			"value": "http://localhost:4500",
+			"type": "string"
+		},
+		{
+			"key": "ADDON_API_BASE_URL",
+			"value": "{{PAPI_BASE_URL}}/addons/api/{{ADDON_UUID}}",
+			"type": "string"
+		},
+		{
+			"key": "API_BASE_URL",
+			"value": "{{ADDON_API_BASE_URL}}",
+			"type": "string"
+		}
+	]
+}
