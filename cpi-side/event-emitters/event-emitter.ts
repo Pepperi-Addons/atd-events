@@ -19,7 +19,7 @@ export abstract class IEventEmitter {
         else {
             // if there's a draft and the event is defined in the draft, run the flow
             const flowObject = eventFromDraft.Flow;
-            const context = this.params.Data.client?.context
+            const context = this.params.Data;
             return await this.runFlow(flowObject, eventData, context);
         }
             
